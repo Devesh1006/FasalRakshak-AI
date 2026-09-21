@@ -1,0 +1,3726 @@
+<!DOCTYPE html>
+<html lang="{{ language or 'en' }}">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>FasalRakshak AI | Crop Health AI</title>
+
+    <meta
+        name="description"
+        content="FasalRakshak AI - AI-powered crop disease detection and hyperlocal crop health monitoring."
+    >
+
+    <style>
+        /* =========================================================
+           RESET
+        ========================================================= */
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+
+        body {
+            font-family:
+                Inter,
+                "Segoe UI",
+                Arial,
+                sans-serif;
+
+            color: #143d25;
+
+            background:
+                linear-gradient(
+                    180deg,
+                    #f8fff8 0%,
+                    #eef9ef 100%
+                );
+
+            overflow-x: hidden;
+        }
+
+
+        button,
+        input,
+        select {
+            font: inherit;
+        }
+
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+
+        /* =========================================================
+           COLOR SYSTEM
+        ========================================================= */
+
+        :root {
+            --green-dark: #075c2d;
+            --green: #0c8a43;
+            --green-light: #36b866;
+            --green-soft: #e8f8ea;
+
+            --cream: #fffdf4;
+            --white: #ffffff;
+
+            --text: #143d25;
+            --muted: #587064;
+
+            --border: #cfe4d3;
+
+            --shadow:
+                0 18px 50px rgba(25, 95, 45, 0.12);
+
+            --radius-lg: 28px;
+            --radius-md: 18px;
+        }
+
+
+        /* =========================================================
+           DECORATIVE LEAVES
+        ========================================================= */
+
+        .leaf-decoration {
+            position: absolute;
+
+            width: 120px;
+            height: 220px;
+
+            pointer-events: none;
+
+            opacity: 0.8;
+
+            z-index: 0;
+        }
+
+
+        .leaf-decoration::before,
+        .leaf-decoration::after {
+            content: "";
+
+            position: absolute;
+
+            width: 45px;
+            height: 95px;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    #86d94d,
+                    #1b9d4b
+                );
+
+            border-radius:
+                100% 0 100% 0;
+
+            transform: rotate(-35deg);
+        }
+
+
+        .leaf-decoration::before {
+            top: 20px;
+            left: 20px;
+        }
+
+
+        .leaf-decoration::after {
+            top: 80px;
+            left: 55px;
+
+            transform:
+                rotate(20deg);
+        }
+
+
+        .leaf-left {
+            top: 120px;
+            left: -25px;
+        }
+
+
+        .leaf-right {
+            top: 390px;
+            right: -25px;
+
+            transform: scaleX(-1);
+        }
+
+
+        /* =========================================================
+           NAVBAR
+        ========================================================= */
+
+        .navbar {
+            position: sticky;
+
+            top: 0;
+
+            z-index: 1000;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            gap: 25px;
+
+            padding:
+                14px
+                5vw;
+
+            background:
+                rgba(255, 255, 248, 0.96);
+
+            border-bottom:
+                1px solid rgba(130, 175, 135, 0.25);
+
+            box-shadow:
+                0 4px 18px rgba(20, 70, 30, 0.06);
+
+            backdrop-filter: blur(12px);
+        }
+
+
+        .brand {
+            display: flex;
+
+            align-items: center;
+
+            gap: 12px;
+
+            min-width: 245px;
+        }
+
+
+        .brand-logo {
+            width: 70px;
+            height: 55px;
+
+            object-fit: contain;
+
+            border-radius: 10px;
+        }
+
+
+        .brand-text {
+            display: flex;
+
+            flex-direction: column;
+        }
+
+
+        .brand-name {
+            font-size: 26px;
+
+            font-weight: 800;
+
+            line-height: 1.05;
+
+            color: var(--green-dark);
+        }
+
+
+        .brand-tagline {
+            margin-top: 4px;
+
+            font-size: 13px;
+
+            font-weight: 700;
+
+            letter-spacing: 1px;
+
+            color: var(--green);
+        }
+
+
+        .nav-links {
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            gap: 6px;
+
+            flex: 1;
+        }
+
+
+        .nav-link {
+            display: flex;
+
+            align-items: center;
+
+            gap: 7px;
+
+            padding:
+                11px
+                16px;
+
+            border-radius: 13px;
+
+            color: #243a2c;
+
+            font-size: 14px;
+
+            font-weight: 600;
+
+            transition:
+                background 0.2s ease,
+                color 0.2s ease,
+                transform 0.2s ease;
+        }
+
+
+        .nav-link:hover {
+            background: #eaf8ed;
+
+            color: var(--green-dark);
+
+            transform: translateY(-1px);
+        }
+
+
+        .nav-link.active {
+            color: white;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #079346,
+                    #08753a
+                );
+
+            box-shadow:
+                0 8px 18px rgba(5, 130, 58, 0.18);
+        }
+
+
+        /* =========================================================
+           LANGUAGE SELECTOR
+        ========================================================= */
+
+        .language-wrapper {
+            position: relative;
+        }
+
+
+        .language-button {
+            display: flex;
+
+            align-items: center;
+
+            gap: 8px;
+
+            min-width: 145px;
+
+            justify-content: space-between;
+
+            padding:
+                11px
+                15px;
+
+            background: white;
+
+            border:
+                1px solid #d5e2d7;
+
+            border-radius: 30px;
+
+            color: #1d3325;
+
+            cursor: pointer;
+        }
+
+
+        .language-button:hover {
+            border-color: #70ad7b;
+        }
+
+
+        .language-menu {
+            position: absolute;
+
+            top: calc(100% + 8px);
+
+            right: 0;
+
+            width: 180px;
+
+            padding: 8px;
+
+            background: white;
+
+            border:
+                1px solid #dce8de;
+
+            border-radius: 16px;
+
+            box-shadow:
+                0 18px 40px rgba(20, 70, 30, 0.16);
+
+            display: none;
+        }
+
+
+        .language-menu.show {
+            display: block;
+        }
+
+
+        .language-option {
+            width: 100%;
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 10px;
+
+            padding:
+                11px
+                12px;
+
+            border: 0;
+
+            border-radius: 10px;
+
+            background: transparent;
+
+            color: #24432e;
+
+            cursor: pointer;
+
+            text-align: left;
+        }
+
+
+        .language-option:hover {
+            background: #edf8ef;
+        }
+
+
+        .language-option.selected {
+            background: #e5f6e8;
+
+            font-weight: 700;
+
+            color: var(--green-dark);
+        }
+
+
+        /* =========================================================
+           HERO
+        ========================================================= */
+
+        .hero {
+            position: relative;
+
+            min-height: 660px;
+
+            display: grid;
+
+            grid-template-columns:
+                minmax(280px, 0.9fr)
+                minmax(400px, 1.05fr)
+                minmax(280px, 0.85fr);
+
+            gap: 30px;
+
+            align-items: center;
+
+            padding:
+                55px
+                5vw
+                60px;
+
+            overflow: hidden;
+
+            background:
+                linear-gradient(
+                    120deg,
+                    #f2fbef 0%,
+                    #eaf8eb 45%,
+                    #f8fff5 100%
+                );
+        }
+
+
+        .hero::before {
+            content: "";
+
+            position: absolute;
+
+            inset: 0;
+
+            background:
+                radial-gradient(
+                    circle at 80% 30%,
+                    rgba(82, 191, 102, 0.18),
+                    transparent 35%
+                ),
+                radial-gradient(
+                    circle at 20% 80%,
+                    rgba(116, 198, 83, 0.14),
+                    transparent 32%
+                );
+
+            pointer-events: none;
+        }
+
+
+        /* =========================================================
+           HERO LEFT
+        ========================================================= */
+
+        .hero-content {
+            position: relative;
+
+            z-index: 2;
+
+            padding-left: 15px;
+        }
+
+
+        .hero-kicker {
+            display: inline-flex;
+
+            align-items: center;
+
+            gap: 8px;
+
+            padding:
+                8px
+                14px;
+
+            background: rgba(255, 255, 255, 0.78);
+
+            border:
+                1px solid #c9e4cd;
+
+            border-radius: 30px;
+
+            color: var(--green-dark);
+
+            font-size: 13px;
+
+            font-weight: 700;
+
+            margin-bottom: 20px;
+        }
+
+
+        .hero-title {
+            font-size:
+                clamp(
+                    42px,
+                    5vw,
+                    70px
+                );
+
+            line-height: 1.03;
+
+            letter-spacing: -2px;
+
+            color: var(--green-dark);
+
+            margin-bottom: 22px;
+        }
+
+
+        .hero-title span {
+            color: var(--green);
+        }
+
+
+        .hero-description {
+            max-width: 580px;
+
+            color: #476354;
+
+            font-size: 17px;
+
+            line-height: 1.75;
+
+            margin-bottom: 28px;
+        }
+
+
+        /* =========================================================
+           FEATURE ICONS
+        ========================================================= */
+
+        .mini-features {
+            display: grid;
+
+            grid-template-columns:
+                repeat(4, 1fr);
+
+            gap: 12px;
+
+            max-width: 620px;
+        }
+
+
+        .mini-feature {
+            text-align: center;
+
+            padding:
+                12px
+                5px;
+
+            border-right:
+                1px solid #d9e8da;
+        }
+
+
+        .mini-feature:last-child {
+            border-right: 0;
+        }
+
+
+        .mini-icon {
+            width: 48px;
+            height: 48px;
+
+            margin: 0 auto 8px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            border-radius: 50%;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    #e5f7e5,
+                    #d6f0d8
+                );
+
+            font-size: 23px;
+        }
+
+
+        .mini-feature strong {
+            display: block;
+
+            font-size: 12px;
+
+            line-height: 1.35;
+
+            color: #245b34;
+        }
+
+
+        /* =========================================================
+           MISSION PILL
+        ========================================================= */
+
+        .mission-pill {
+            display: inline-flex;
+
+            align-items: center;
+
+            gap: 10px;
+
+            margin-top: 25px;
+
+            padding:
+                11px
+                18px;
+
+            border-radius: 30px;
+
+            background:
+                rgba(255, 255, 255, 0.78);
+
+            border:
+                1px solid #cce4cf;
+
+            color: var(--green-dark);
+
+            font-weight: 700;
+
+            font-size: 13px;
+        }
+
+
+        /* =========================================================
+           UPLOAD CARD
+        ========================================================= */
+
+        .upload-card {
+            position: relative;
+
+            z-index: 5;
+
+            background:
+                rgba(255, 255, 255, 0.94);
+
+            border:
+                1px solid rgba(202, 226, 207, 0.9);
+
+            border-radius:
+                30px;
+
+            padding:
+                25px;
+
+            box-shadow:
+                0 25px 70px rgba(26, 91, 45, 0.18);
+
+            backdrop-filter: blur(10px);
+        }
+
+
+        .upload-card::before {
+            content: "";
+
+            position: absolute;
+
+            inset: 18px;
+
+            border:
+                2px dashed #78bd88;
+
+            border-radius:
+                24px;
+
+            pointer-events: none;
+        }
+
+
+        .upload-inner {
+            position: relative;
+
+            z-index: 2;
+
+            text-align: center;
+
+            padding:
+                28px
+                18px
+                20px;
+        }
+
+
+        .camera-icon {
+            display: inline-flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            width: 82px;
+            height: 82px;
+
+            border-radius: 24px;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    #0a7139,
+                    #16a952
+                );
+
+            color: white;
+
+            font-size: 42px;
+
+            box-shadow:
+                0 15px 30px rgba(8, 126, 58, 0.22);
+
+            margin-bottom: 20px;
+        }
+
+
+        .upload-title {
+            font-size: 29px;
+
+            color: var(--green-dark);
+
+            margin-bottom: 8px;
+        }
+
+
+        .upload-subtitle {
+            color: var(--muted);
+
+            font-size: 14px;
+
+            margin-bottom: 22px;
+        }
+
+
+        .file-input {
+            display: none;
+        }
+
+
+        .choose-button {
+            width: 100%;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            gap: 15px;
+
+            border: 0;
+
+            padding:
+                16px
+                22px;
+
+            border-radius: 40px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #0c9a49,
+                    #08793b
+                );
+
+            color: white;
+
+            font-size: 17px;
+
+            font-weight: 800;
+
+            cursor: pointer;
+
+            box-shadow:
+                0 12px 25px rgba(7, 139, 63, 0.20);
+
+            transition:
+                transform 0.2s ease,
+                box-shadow 0.2s ease;
+        }
+
+
+        .choose-button:hover {
+            transform: translateY(-2px);
+
+            box-shadow:
+                0 16px 30px rgba(7, 139, 63, 0.27);
+        }
+
+
+        .drop-text {
+            margin:
+                15px
+                0
+                10px;
+
+            color: #53685b;
+
+            font-size: 13px;
+        }
+
+
+        .file-info {
+            color: #718178;
+
+            font-size: 11px;
+        }
+
+
+        .selected-file {
+            margin-top: 12px;
+
+            padding: 8px 12px;
+
+            border-radius: 10px;
+
+            background: #ecf8ee;
+
+            color: #27733a;
+
+            font-size: 12px;
+
+            display: none;
+        }
+
+
+        /* =========================================================
+           SAMPLE CARD
+        ========================================================= */
+
+        .sample-card {
+            display: grid;
+
+            grid-template-columns: 120px 1fr auto;
+
+            align-items: center;
+
+            gap: 15px;
+
+            margin-top: 20px;
+
+            padding: 12px;
+
+            border:
+                1px solid #d9eadb;
+
+            border-radius: 20px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #f7fcf7,
+                    #edf8ef
+                );
+        }
+
+
+        .sample-image {
+            width: 120px;
+            height: 90px;
+
+            border-radius: 14px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            background:
+                radial-gradient(
+                    circle at 45% 45%,
+                    #8bcf56 0 18%,
+                    #4e9e48 19% 35%,
+                    #23753c 36% 58%,
+                    #124d2d 59%
+                );
+
+            overflow: hidden;
+
+            font-size: 44px;
+        }
+
+
+        .sample-title {
+            color: var(--green-dark);
+
+            font-weight: 800;
+
+            margin-bottom: 5px;
+        }
+
+
+        .sample-text {
+            color: #617367;
+
+            font-size: 12px;
+
+            line-height: 1.5;
+        }
+
+
+        .sample-button {
+            border:
+                1px solid #76bb82;
+
+            background: white;
+
+            color: #1c7b3a;
+
+            border-radius: 25px;
+
+            padding:
+                9px
+                14px;
+
+            cursor: pointer;
+
+            font-size: 12px;
+
+            font-weight: 700;
+
+            white-space: nowrap;
+        }
+
+
+        .sample-button:hover {
+            background: #eaf8ed;
+        }
+
+
+        /* =========================================================
+           RIGHT VISUAL
+        ========================================================= */
+
+        .hero-visual {
+            position: relative;
+
+            min-height: 550px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            z-index: 2;
+
+            overflow: hidden;
+
+            border-radius: 30px;
+        }
+
+
+        .visual-background {
+            position: absolute;
+
+            inset: 0;
+
+            background:
+                radial-gradient(
+                    circle at 55% 45%,
+                    #b9ed75 0,
+                    #72bd50 25%,
+                    #347e43 55%,
+                    #123f2c 100%
+                );
+
+            border-radius: 30px;
+        }
+
+
+        .visual-leaf {
+            position: relative;
+
+            z-index: 2;
+
+            width: 65%;
+
+            height: 70%;
+
+            background:
+                linear-gradient(
+                    125deg,
+                    #b9ee68,
+                    #5fbf45 40%,
+                    #197442 75%,
+                    #0a482d
+                );
+
+            border-radius:
+                100% 0 100% 0;
+
+            transform:
+                rotate(-27deg);
+
+            box-shadow:
+                0 25px 50px rgba(0, 0, 0, 0.25);
+
+            overflow: hidden;
+        }
+
+
+        .visual-leaf::before {
+            content: "";
+
+            position: absolute;
+
+            left: 49%;
+
+            top: 0;
+
+            width: 5px;
+
+            height: 100%;
+
+            background:
+                rgba(240, 255, 207, 0.75);
+
+            transform: rotate(25deg);
+        }
+
+
+        .visual-leaf::after {
+            content: "";
+
+            position: absolute;
+
+            inset: 20%;
+
+            background:
+                radial-gradient(
+                    circle,
+                    rgba(130, 75, 25, 0.7) 0 4%,
+                    transparent 5%
+                );
+
+            background-size:
+                45px 45px;
+
+            opacity: 0.9;
+        }
+
+
+        /* =========================================================
+           AI SCANNER
+        ========================================================= */
+
+        .scan-frame {
+            position: absolute;
+
+            z-index: 4;
+
+            width: 60%;
+
+            height: 50%;
+
+            border:
+                3px solid #b5ffcc;
+
+            border-radius: 20px;
+
+            box-shadow:
+                0 0 30px rgba(151, 255, 184, 0.55);
+
+            animation:
+                scannerPulse 2.5s infinite;
+        }
+
+
+        .scan-frame::before,
+        .scan-frame::after {
+            content: "";
+
+            position: absolute;
+
+            width: 35px;
+            height: 35px;
+
+            border-color: #d0ffdb;
+
+            border-style: solid;
+        }
+
+
+        .scan-frame::before {
+            top: -3px;
+            left: -3px;
+
+            border-width:
+                4px
+                0
+                0
+                4px;
+        }
+
+
+        .scan-frame::after {
+            bottom: -3px;
+            right: -3px;
+
+            border-width:
+                0
+                4px
+                4px
+                0;
+        }
+
+
+        .scan-line {
+            position: absolute;
+
+            z-index: 5;
+
+            width: 60%;
+
+            height: 3px;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    transparent,
+                    #baffc9,
+                    transparent
+                );
+
+            box-shadow:
+                0 0 12px #baffc9;
+
+            animation:
+                scanMove 2.4s infinite;
+        }
+
+
+        @keyframes scannerPulse {
+            0%,
+            100% {
+                transform: scale(1);
+
+                opacity: 0.8;
+            }
+
+            50% {
+                transform: scale(1.04);
+
+                opacity: 1;
+            }
+        }
+
+
+        @keyframes scanMove {
+            0% {
+                transform:
+                    translateY(-90px);
+            }
+
+            50% {
+                transform:
+                    translateY(90px);
+            }
+
+            100% {
+                transform:
+                    translateY(-90px);
+            }
+        }
+
+
+        /* =========================================================
+           DISEASE DETECTION BADGE
+        ========================================================= */
+
+        .detection-card {
+            position: absolute;
+
+            z-index: 8;
+
+            top: 45px;
+
+            right: 25px;
+
+            width: 245px;
+
+            padding: 17px;
+
+            border-radius: 17px;
+
+            background:
+                rgba(5, 55, 34, 0.88);
+
+            border:
+                1px solid rgba(164, 255, 190, 0.45);
+
+            color: white;
+
+            box-shadow:
+                0 18px 35px rgba(0, 0, 0, 0.18);
+
+            backdrop-filter: blur(10px);
+        }
+
+
+        .detection-header {
+            display: flex;
+
+            align-items: center;
+
+            gap: 10px;
+
+            margin-bottom: 9px;
+        }
+
+
+        .ai-icon {
+            width: 42px;
+            height: 42px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            border-radius: 10px;
+
+            border:
+                1px solid #8ef7ae;
+
+            color: #a6ffc1;
+
+            font-size: 22px;
+        }
+
+
+        .detection-title {
+            font-weight: 800;
+
+            font-size: 14px;
+        }
+
+
+        .detection-disease {
+            color: #dfffe7;
+
+            font-size: 13px;
+
+            margin-bottom: 10px;
+        }
+
+
+        .confidence-row {
+            display: flex;
+
+            align-items: center;
+
+            gap: 8px;
+        }
+
+
+        .confidence-bar {
+            flex: 1;
+
+            height: 7px;
+
+            border-radius: 20px;
+
+            background: rgba(255, 255, 255, 0.2);
+
+            overflow: hidden;
+        }
+
+
+        .confidence-fill {
+            width: 92%;
+
+            height: 100%;
+
+            border-radius: inherit;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    #55f18b,
+                    #b4ffc9
+                );
+        }
+
+
+        .confidence-text {
+            font-size: 11px;
+
+            color: #dfffe7;
+        }
+
+
+        .visual-caption {
+            position: absolute;
+
+            z-index: 7;
+
+            bottom: 55px;
+
+            right: 28px;
+
+            width: 220px;
+
+            color: white;
+
+            text-align: right;
+
+            font-family:
+                Georgia,
+                serif;
+
+            font-size: 24px;
+
+            line-height: 1.2;
+
+            font-style: italic;
+
+            text-shadow:
+                0 3px 12px rgba(0, 0, 0, 0.4);
+        }
+
+
+        /* =========================================================
+           QUICK ACTIONS
+        ========================================================= */
+
+        .quick-section {
+            position: relative;
+
+            z-index: 10;
+
+            background:
+                linear-gradient(
+                    180deg,
+                    #fffef9,
+                    #f6fbf4
+                );
+
+            padding:
+                45px
+                5vw
+                55px;
+        }
+
+
+        .quick-grid {
+            max-width: 1300px;
+
+            margin: 0 auto;
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(4, 1fr);
+
+            gap: 20px;
+        }
+
+
+        .quick-card {
+            position: relative;
+
+            min-height: 170px;
+
+            padding: 24px;
+
+            border-radius:
+                24px;
+
+            border:
+                1px solid #d9e9dc;
+
+            overflow: hidden;
+
+            transition:
+                transform 0.25s ease,
+                box-shadow 0.25s ease;
+        }
+
+
+        .quick-card:hover {
+            transform:
+                translateY(-6px);
+
+            box-shadow:
+                0 18px 35px rgba(20, 80, 35, 0.12);
+        }
+
+
+        .quick-card:nth-child(1) {
+            background:
+                linear-gradient(
+                    135deg,
+                    #f0fff0,
+                    #e4f8e5
+                );
+        }
+
+
+        .quick-card:nth-child(2) {
+            background:
+                linear-gradient(
+                    135deg,
+                    #f0faff,
+                    #e6f5ff
+                );
+        }
+
+
+        .quick-card:nth-child(3) {
+            background:
+                linear-gradient(
+                    135deg,
+                    #fffdf0,
+                    #fff8d9
+                );
+        }
+
+
+        .quick-card:nth-child(4) {
+            background:
+                linear-gradient(
+                    135deg,
+                    #fbf3ff,
+                    #f4eaff
+                );
+        }
+
+
+        .quick-icon {
+            width: 56px;
+            height: 56px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            border-radius: 50%;
+
+            background:
+                rgba(255, 255, 255, 0.72);
+
+            font-size: 27px;
+
+            margin-bottom: 14px;
+        }
+
+
+        .quick-title {
+            font-size: 17px;
+
+            font-weight: 800;
+
+            margin-bottom: 7px;
+        }
+
+
+        .quick-description {
+            color: #5b7062;
+
+            font-size: 12px;
+
+            line-height: 1.55;
+
+            max-width: 230px;
+        }
+
+
+        .quick-arrow {
+            position: absolute;
+
+            bottom: 20px;
+
+            right: 20px;
+
+            width: 35px;
+            height: 35px;
+
+            border-radius: 50%;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            background: var(--green);
+
+            color: white;
+
+            font-weight: 800;
+        }
+
+
+        /* =========================================================
+           HOW IT WORKS
+        ========================================================= */
+
+        .how-section {
+            padding:
+                65px
+                5vw;
+
+            background: #f7fcf5;
+
+            text-align: center;
+        }
+
+
+        .section-title {
+            color: var(--green-dark);
+
+            font-size:
+                clamp(28px, 4vw, 40px);
+
+            margin-bottom: 12px;
+        }
+
+
+        .section-subtitle {
+            max-width: 650px;
+
+            margin:
+                0 auto 35px;
+
+            color: #607266;
+
+            line-height: 1.6;
+        }
+
+
+        .workflow-grid {
+            max-width: 1100px;
+
+            margin: 0 auto;
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(5, 1fr);
+
+            gap: 12px;
+        }
+
+
+        .workflow-step {
+            padding: 22px 12px;
+
+            background: white;
+
+            border:
+                1px solid #dce9de;
+
+            border-radius: 18px;
+        }
+
+
+        .workflow-number {
+            width: 35px;
+            height: 35px;
+
+            margin:
+                0 auto 12px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            border-radius: 50%;
+
+            background: #e2f6e6;
+
+            color: var(--green-dark);
+
+            font-weight: 800;
+        }
+
+
+        .workflow-icon {
+            font-size: 27px;
+
+            margin-bottom: 9px;
+        }
+
+
+        .workflow-step strong {
+            display: block;
+
+            font-size: 13px;
+        }
+
+
+        /* =========================================================
+           FOOTER
+        ========================================================= */
+
+        .footer {
+            position: relative;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #075d2e,
+                    #0a773b
+                );
+
+            color: #e4f6e7;
+
+            padding:
+                38px
+                5vw;
+
+            text-align: center;
+        }
+
+
+        .footer-brand {
+            font-size: 21px;
+
+            font-weight: 800;
+
+            margin-bottom: 8px;
+        }
+
+
+        .footer-text {
+            font-size: 12px;
+
+            opacity: 0.85;
+
+            margin-bottom: 15px;
+        }
+
+
+        .footer-links {
+            display: flex;
+
+            justify-content: center;
+
+            gap: 20px;
+
+            flex-wrap: wrap;
+
+            font-size: 12px;
+        }
+
+
+        .footer-links a:hover {
+            text-decoration: underline;
+        }
+
+
+        /* =========================================================
+           MOBILE NAVIGATION
+        ========================================================= */
+
+        .mobile-menu-button {
+            display: none;
+
+            width: 42px;
+            height: 42px;
+
+            border: 0;
+
+            border-radius: 12px;
+
+            background: #eaf7ec;
+
+            color: var(--green-dark);
+
+            font-size: 22px;
+
+            cursor: pointer;
+        }
+
+
+        /* =========================================================
+           RESPONSIVE
+        ========================================================= */
+
+        @media (max-width: 1150px) {
+
+            .navbar {
+                padding-left: 3vw;
+                padding-right: 3vw;
+            }
+
+
+            .hero {
+                grid-template-columns:
+                    1fr
+                    1.1fr;
+
+                padding:
+                    45px
+                    4vw;
+            }
+
+
+            .hero-content {
+                grid-column: 1 / 2;
+            }
+
+
+            .upload-card {
+                grid-column: 2 / 3;
+            }
+
+
+            .hero-visual {
+                grid-column: 1 / 3;
+
+                min-height: 420px;
+
+                max-width: 900px;
+
+                width: 100%;
+
+                margin: 0 auto;
+            }
+
+
+            .quick-grid {
+                grid-template-columns:
+                    repeat(2, 1fr);
+            }
+
+
+            .workflow-grid {
+                grid-template-columns:
+                    repeat(3, 1fr);
+            }
+        }
+
+
+        @media (max-width: 900px) {
+
+            .navbar {
+                flex-wrap: wrap;
+            }
+
+
+            .brand {
+                flex: 1;
+            }
+
+
+            .nav-links {
+                order: 3;
+
+                width: 100%;
+
+                justify-content: flex-start;
+
+                overflow-x: auto;
+
+                padding-bottom: 3px;
+            }
+
+
+            .hero {
+                grid-template-columns: 1fr;
+            }
+
+
+            .hero-content,
+            .upload-card,
+            .hero-visual {
+                grid-column: auto;
+            }
+
+
+            .hero-visual {
+                min-height: 430px;
+            }
+        }
+
+
+        @media (max-width: 650px) {
+
+            .brand-logo {
+                width: 58px;
+                height: 48px;
+            }
+
+
+            .brand-name {
+                font-size: 20px;
+            }
+
+
+            .brand-tagline {
+                font-size: 10px;
+            }
+
+
+            .nav-links {
+                gap: 3px;
+            }
+
+
+            .nav-link {
+                padding:
+                    9px
+                    10px;
+
+                font-size: 12px;
+            }
+
+
+            .hero {
+                padding:
+                    35px
+                    18px
+                    40px;
+            }
+
+
+            .hero-title {
+                font-size: 43px;
+            }
+
+
+            .hero-description {
+                font-size: 15px;
+            }
+
+
+            .mini-features {
+                grid-template-columns:
+                    repeat(2, 1fr);
+            }
+
+
+            .mini-feature {
+                border-right: 0;
+            }
+
+
+            .sample-card {
+                grid-template-columns: 85px 1fr;
+            }
+
+
+            .sample-image {
+                width: 85px;
+                height: 75px;
+            }
+
+
+            .sample-button {
+                grid-column: 1 / 3;
+                width: 100%;
+            }
+
+
+            .hero-visual {
+                min-height: 360px;
+            }
+
+
+            .detection-card {
+                top: 18px;
+                right: 12px;
+                width: 205px;
+            }
+
+
+            .visual-caption {
+                bottom: 25px;
+                right: 15px;
+                width: 170px;
+                font-size: 18px;
+            }
+
+
+            .quick-section,
+            .how-section {
+                padding-left: 18px;
+                padding-right: 18px;
+            }
+
+
+            .quick-grid {
+                grid-template-columns: 1fr;
+            }
+
+
+            .workflow-grid {
+                grid-template-columns:
+                    repeat(2, 1fr);
+            }
+
+
+            .language-button {
+                min-width: 125px;
+            }
+        }
+
+
+        @media (max-width: 430px) {
+
+            .workflow-grid {
+                grid-template-columns: 1fr;
+            }
+
+
+            .upload-card {
+                padding: 14px;
+            }
+
+
+            .upload-inner {
+                padding:
+                    30px
+                    10px
+                    15px;
+            }
+
+
+            .hero-visual {
+                min-height: 320px;
+            }
+
+
+            .visual-leaf {
+                width: 70%;
+                height: 65%;
+            }
+        }
+    
+
+        /* =========================================================
+           FASALRAKSHAK AI IMAGE VISUAL
+        ========================================================= */
+
+        .hero-visual {
+            min-height: 0;
+            aspect-ratio: 1.15 / 1;
+            padding: 0;
+            background: transparent;
+        }
+
+
+        .hero-visual-image {
+            display: block;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 30px;
+            box-shadow: 0 25px 60px rgba(26, 91, 45, 0.18);
+        }
+
+
+        @media (max-width: 900px) {
+            .hero-visual {
+                min-height: 0;
+                aspect-ratio: 1.15 / 1;
+                max-width: 900px;
+            }
+        }
+
+
+        @media (max-width: 650px) {
+            .hero-visual {
+                aspect-ratio: 1.15 / 1;
+            }
+
+            .hero-visual-image {
+                border-radius: 22px;
+            }
+        }
+
+    </style>
+</head>
+
+
+<body>
+
+    <!-- =========================================================
+         DECORATIVE BACKGROUND
+    ========================================================= -->
+
+    <div class="leaf-decoration leaf-left"></div>
+    <div class="leaf-decoration leaf-right"></div>
+
+
+    <!-- =========================================================
+         NAVIGATION
+    ========================================================= -->
+
+    <header class="navbar">
+
+        <a
+            class="brand"
+            href="{{ url_for('home', lang=language or 'en') }}"
+        >
+
+            <img
+                class="brand-logo"
+                src="{{ url_for('static', filename='fasalrakshak-logo.jpeg') }}"
+                alt="FasalRakshak AI Logo"
+            >
+
+            <div class="brand-text">
+
+                <div class="brand-name">
+                    FasalRakshak AI
+                </div>
+
+                <div class="brand-tagline">
+                    CROP HEALTH AI
+                </div>
+
+            </div>
+
+        </a>
+
+
+        <nav class="nav-links">
+
+            <a
+                class="nav-link active"
+                href="{{ url_for('home', lang=language or 'en') }}"
+                data-nav="home"
+            >
+                🏠
+                <span data-i18n="nav_home">
+                    Home
+                </span>
+            </a>
+
+
+            <a
+                class="nav-link"
+                href="#scanner"
+                data-nav="scan"
+            >
+                📷
+                <span data-i18n="nav_scan">
+                    Scan
+                </span>
+            </a>
+
+
+            <a
+                class="nav-link"
+                href="{{ url_for('history', lang=language or 'en') }}"
+                data-nav="history"
+            >
+                ◷
+                <span data-i18n="nav_history">
+                    History
+                </span>
+            </a>
+
+
+            <a
+                class="nav-link"
+                href="{{ url_for('outbreak_map', lang=language or 'en') }}"
+                data-nav="map"
+            >
+                📍
+                <span data-i18n="nav_map">
+                    Outbreak Map
+                </span>
+            </a>
+
+
+            <a
+                class="nav-link"
+                href="#about"
+                data-nav="about"
+            >
+                ⓘ
+                <span data-i18n="nav_about">
+                    About
+                </span>
+            </a>
+
+        </nav>
+
+
+        <!-- =====================================================
+             LANGUAGE SELECTOR
+        ====================================================== -->
+
+        <div class="language-wrapper">
+
+            <button
+                class="language-button"
+                id="languageButton"
+                type="button"
+                aria-expanded="false"
+            >
+
+                <span>
+                    🌐
+                    <span id="currentLanguage">
+                        English
+                    </span>
+                </span>
+
+                <span>
+                    ▾
+                </span>
+
+            </button>
+
+
+            <div
+                class="language-menu"
+                id="languageMenu"
+            >
+
+                <button
+                    class="language-option"
+                    type="button"
+                    data-language="hi"
+                >
+                    🇮🇳
+                    <span>
+                        हिंदी
+                    </span>
+                </button>
+
+
+                <button
+                    class="language-option"
+                    type="button"
+                    data-language="mr"
+                >
+                    🟠
+                    <span>
+                        मराठी
+                    </span>
+                </button>
+
+
+                <button
+                    class="language-option"
+                    type="button"
+                    data-language="en"
+                >
+                    🇬🇧
+                    <span>
+                        English
+                    </span>
+                </button>
+
+            </div>
+
+        </div>
+
+    </header>
+
+
+    <!-- =========================================================
+         HERO SECTION
+    ========================================================= -->
+
+    <main>
+
+        <section class="hero" id="scanner">
+
+            <!-- =================================================
+                 LEFT CONTENT
+            ================================================== -->
+
+            <div class="hero-content">
+
+                <div
+                    class="hero-kicker"
+                    data-i18n="hero_kicker"
+                >
+                    🌱 AI-Powered Crop Protection
+                </div>
+
+
+                <h1 class="hero-title">
+
+                    <span data-i18n="hero_title_1">
+                        Healthy Crops
+                    </span>
+
+                    <br>
+
+                    <span data-i18n="hero_title_2">
+                        Brighter Future
+                    </span>
+
+                </h1>
+
+
+                <p
+                    class="hero-description"
+                    data-i18n="hero_description"
+                >
+                    FasalRakshak AI uses advanced artificial
+                    intelligence to detect crop diseases,
+                    monitor outbreaks and help farmers protect
+                    their harvests.
+                </p>
+
+
+                <!-- =============================================
+                     MINI FEATURES
+                ============================================== -->
+
+                <div class="mini-features">
+
+                    <div class="mini-feature">
+
+                        <div class="mini-icon">
+                            🧠
+                        </div>
+
+                        <strong data-i18n="feature_ai">
+                            AI Powered
+                            <br>
+                            Detection
+                        </strong>
+
+                    </div>
+
+
+                    <div class="mini-feature">
+
+                        <div class="mini-icon">
+                            📍
+                        </div>
+
+                        <strong data-i18n="feature_geo">
+                            Geo-Tagged
+                            <br>
+                            Reports
+                        </strong>
+
+                    </div>
+
+
+                    <div class="mini-feature">
+
+                        <div class="mini-icon">
+                            🔔
+                        </div>
+
+                        <strong data-i18n="feature_alert">
+                            Hyperlocal
+                            <br>
+                            Alerts
+                        </strong>
+
+                    </div>
+
+
+                    <div class="mini-feature">
+
+                        <div class="mini-icon">
+                            🌿
+                        </div>
+
+                        <strong data-i18n="feature_health">
+                            Health
+                            <br>
+                            Score
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <div
+                    class="mission-pill"
+                    data-i18n="mission"
+                >
+                    🌱 Together for Healthier Farms
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 UPLOAD CARD
+            ================================================== -->
+
+            <div
+                class="upload-card"
+                id="uploadCard"
+            >
+
+                <div class="upload-inner">
+
+                    <div class="camera-icon">
+                        📷
+                    </div>
+
+
+                    <h2
+                        class="upload-title"
+                        data-i18n="upload_title"
+                    >
+                        Upload Crop Photo
+                    </h2>
+
+
+                    <p
+                        class="upload-subtitle"
+                        data-i18n="upload_subtitle"
+                    >
+                        Detect diseases in seconds with AI
+                    </p>
+
+
+                    <form
+                        id="predictForm"
+                        action="{{ url_for('predict') }}"
+                        method="POST"
+                        enctype="multipart/form-data"
+                    >
+
+                        <input
+                            type="hidden"
+                            name="language"
+                            id="languageInput"
+                            value="{{ language or 'en' }}"
+                        >
+
+
+                        <input
+                            class="file-input"
+                            type="file"
+                            name="image"
+                            id="cropImage"
+                            accept="image/*"
+                            required
+                        >
+
+
+                        <label
+                            class="choose-button"
+                            for="cropImage"
+                        >
+
+                            📷
+
+                            <span data-i18n="choose_photo">
+                                Choose Photo
+                            </span>
+
+                            🖼️
+
+                        </label>
+
+
+                        <div
+                            class="drop-text"
+                            data-i18n="drop_text"
+                        >
+                            or drag and drop an image here
+                        </div>
+
+
+                        <div class="file-info">
+
+                            <span data-i18n="supported">
+                                Supported formats:
+                            </span>
+
+                            JPG, PNG
+
+                            &nbsp; | &nbsp;
+
+                            <span data-i18n="max_size">
+                                Max size:
+                            </span>
+
+                            5MB
+
+                        </div>
+
+
+                        <div
+                            class="selected-file"
+                            id="selectedFile"
+                        ></div>
+
+                    </form>
+
+                </div>
+
+
+                <!-- =============================================
+                     SAMPLE CARD
+                ============================================== -->
+
+                <div class="sample-card">
+
+                    <div class="sample-image">
+                        🍃
+                    </div>
+
+
+                    <div>
+
+                        <div
+                            class="sample-title"
+                            data-i18n="sample_title"
+                        >
+                            Try a Sample
+                        </div>
+
+
+                        <div
+                            class="sample-text"
+                            data-i18n="sample_text"
+                        >
+                            See how FasalRakshak AI works
+                        </div>
+
+                    </div>
+
+
+                    <button
+                        class="sample-button"
+                        type="button"
+                        id="sampleButton"
+                        data-i18n="sample_button"
+                    >
+                        🌿 Use Sample Image
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 AI VISUAL
+            ================================================== -->
+
+            <div class="hero-visual">
+
+                <img
+                    class="hero-visual-image"
+                    src="{{ url_for('static', filename='fasalrakshak-ai-visual.png') }}"
+                    alt="FasalRakshak AI crop disease detection visual"
+                >
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+             QUICK ACTIONS
+        ====================================================== -->
+
+        <section class="quick-section">
+
+            <div class="quick-grid">
+
+                <a
+                    class="quick-card"
+                    href="#scanner"
+                >
+
+                    <div class="quick-icon">
+                        🌿
+                    </div>
+
+
+                    <div
+                        class="quick-title"
+                        data-i18n="quick_scan_title"
+                    >
+                        Crop Scan
+                    </div>
+
+
+                    <div
+                        class="quick-description"
+                        data-i18n="quick_scan_text"
+                    >
+                        Upload a crop photo and let AI
+                        identify possible diseases.
+                    </div>
+
+
+                    <div class="quick-arrow">
+                        →
+                    </div>
+
+                </a>
+
+
+                <a
+                    class="quick-card"
+                    href="{{ url_for('outbreak_map', lang=language or 'en') }}"
+                >
+
+                    <div class="quick-icon">
+                        📍
+                    </div>
+
+
+                    <div
+                        class="quick-title"
+                        data-i18n="quick_map_title"
+                    >
+                        Outbreak Map
+                    </div>
+
+
+                    <div
+                        class="quick-description"
+                        data-i18n="quick_map_text"
+                    >
+                        View local alerts and monitor
+                        disease activity geographically.
+                    </div>
+
+
+                    <div class="quick-arrow">
+                        →
+                    </div>
+
+                </a>
+
+
+                <a
+                    class="quick-card"
+                    href="{{ url_for('history', lang=language or 'en') }}"
+                >
+
+                    <div class="quick-icon">
+                        🛡️
+                    </div>
+
+
+                    <div
+                        class="quick-title"
+                        data-i18n="quick_history_title"
+                    >
+                        Monitoring History
+                    </div>
+
+
+                    <div
+                        class="quick-description"
+                        data-i18n="quick_history_text"
+                    >
+                        Track previous scans and follow
+                        crop health over time.
+                    </div>
+
+
+                    <div class="quick-arrow">
+                        →
+                    </div>
+
+                </a>
+
+
+                <a
+                    class="quick-card"
+                    href="{{ url_for('outbreak_map', lang=language or 'en') }}"
+                >
+
+                    <div class="quick-icon">
+                        👨‍🌾
+                    </div>
+
+
+                    <div
+                        class="quick-title"
+                        data-i18n="quick_community_title"
+                    >
+                        Farmer Community
+                    </div>
+
+
+                    <div
+                        class="quick-description"
+                        data-i18n="quick_community_text"
+                    >
+                        Share evidence and help identify
+                        emerging crop disease patterns.
+                    </div>
+
+
+                    <div class="quick-arrow">
+                        →
+                    </div>
+
+                </a>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+             HOW IT WORKS
+        ====================================================== -->
+
+        <section
+            class="how-section"
+            id="about"
+        >
+
+            <h2
+                class="section-title"
+                data-i18n="how_title"
+            >
+                How FasalRakshak AI Works
+            </h2>
+
+
+            <p
+                class="section-subtitle"
+                data-i18n="how_subtitle"
+            >
+                From a simple crop photo to intelligent
+                disease monitoring and hyperlocal alerts.
+            </p>
+
+
+            <div class="workflow-grid">
+
+                <div class="workflow-step">
+
+                    <div class="workflow-number">
+                        01
+                    </div>
+
+                    <div class="workflow-icon">
+                        📷
+                    </div>
+
+                    <strong data-i18n="step_upload">
+                        Upload Photo
+                    </strong>
+
+                </div>
+
+
+                <div class="workflow-step">
+
+                    <div class="workflow-number">
+                        02
+                    </div>
+
+                    <div class="workflow-icon">
+                        🤖
+                    </div>
+
+                    <strong data-i18n="step_ai">
+                        AI Analysis
+                    </strong>
+
+                </div>
+
+
+                <div class="workflow-step">
+
+                    <div class="workflow-number">
+                        03
+                    </div>
+
+                    <div class="workflow-icon">
+                        🛡️
+                    </div>
+
+                    <strong data-i18n="step_verify">
+                        Reliability Check
+                    </strong>
+
+                </div>
+
+
+                <div class="workflow-step">
+
+                    <div class="workflow-number">
+                        04
+                    </div>
+
+                    <div class="workflow-icon">
+                        📍
+                    </div>
+
+                    <strong data-i18n="step_map">
+                        Geographic Mapping
+                    </strong>
+
+                </div>
+
+
+                <div class="workflow-step">
+
+                    <div class="workflow-number">
+                        05
+                    </div>
+
+                    <div class="workflow-icon">
+                        🚨
+                    </div>
+
+                    <strong data-i18n="step_alert">
+                        Hyperlocal Alert
+                    </strong>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- =========================================================
+         FOOTER
+    ========================================================= -->
+
+    <footer class="footer">
+
+        <div class="footer-brand">
+            🌿 FasalRakshak AI
+        </div>
+
+
+        <div
+            class="footer-text"
+            data-i18n="footer_text"
+        >
+            AI-powered crop health protection for
+            healthier farms and safer harvests.
+        </div>
+
+
+        <div class="footer-links">
+
+            <a
+                href="#scanner"
+                data-i18n="footer_scan"
+            >
+                Crop Scan
+            </a>
+
+
+            <a
+                href="{{ url_for('outbreak_map', lang=language or 'en') }}"
+                data-i18n="footer_map"
+            >
+                Outbreak Map
+            </a>
+
+
+            <a
+                href="{{ url_for('history', lang=language or 'en') }}"
+                data-i18n="footer_history"
+            >
+                History
+            </a>
+
+
+            <span>
+                © 2026 FasalRakshak AI
+            </span>
+
+        </div>
+
+    </footer>
+
+
+    <!-- =========================================================
+         MULTILINGUAL JAVASCRIPT
+    ========================================================= -->
+
+    <script>
+
+        const translations = {
+
+            en: {
+
+                nav_home:
+                    "Home",
+
+                nav_scan:
+                    "Scan",
+
+                nav_history:
+                    "History",
+
+                nav_map:
+                    "Outbreak Map",
+
+                nav_about:
+                    "About",
+
+                hero_kicker:
+                    "🌱 AI-Powered Crop Protection",
+
+                hero_title_1:
+                    "Healthy Crops",
+
+                hero_title_2:
+                    "Brighter Future",
+
+                hero_description:
+                    "FasalRakshak AI uses advanced artificial intelligence to detect crop diseases, monitor outbreaks and help farmers protect their harvests.",
+
+                feature_ai:
+                    "AI Powered<br>Detection",
+
+                feature_geo:
+                    "Geo-Tagged<br>Reports",
+
+                feature_alert:
+                    "Hyperlocal<br>Alerts",
+
+                feature_health:
+                    "Health<br>Score",
+
+                mission:
+                    "🌱 Together for Healthier Farms",
+
+                upload_title:
+                    "Upload Crop Photo",
+
+                upload_subtitle:
+                    "Detect diseases in seconds with AI",
+
+                choose_photo:
+                    "Choose Photo",
+
+                drop_text:
+                    "or drag and drop an image here",
+
+                supported:
+                    "Supported formats:",
+
+                max_size:
+                    "Max size:",
+
+                sample_title:
+                    "Try a Sample",
+
+                sample_text:
+                    "See how FasalRakshak AI works",
+
+                sample_button:
+                    "🌿 Use Sample Image",
+
+                disease_detected:
+                    "Disease Detected",
+
+                leaf_rust:
+                    "Leaf Rust",
+
+                confidence:
+                    "Confidence",
+
+                visual_caption:
+                    "AI for Farmer's<br>Prosperity",
+
+                quick_scan_title:
+                    "Crop Scan",
+
+                quick_scan_text:
+                    "Upload a crop photo and let AI identify possible diseases.",
+
+                quick_map_title:
+                    "Outbreak Map",
+
+                quick_map_text:
+                    "View local alerts and monitor disease activity geographically.",
+
+                quick_history_title:
+                    "Monitoring History",
+
+                quick_history_text:
+                    "Track previous scans and follow crop health over time.",
+
+                quick_community_title:
+                    "Farmer Community",
+
+                quick_community_text:
+                    "Share evidence and help identify emerging crop disease patterns.",
+
+                how_title:
+                    "How FasalRakshak AI Works",
+
+                how_subtitle:
+                    "From a simple crop photo to intelligent disease monitoring and hyperlocal alerts.",
+
+                step_upload:
+                    "Upload Photo",
+
+                step_ai:
+                    "AI Analysis",
+
+                step_verify:
+                    "Reliability Check",
+
+                step_map:
+                    "Geographic Mapping",
+
+                step_alert:
+                    "Hyperlocal Alert",
+
+                footer_text:
+                    "AI-powered crop health protection for healthier farms and safer harvests.",
+
+                footer_scan:
+                    "Crop Scan",
+
+                footer_map:
+                    "Outbreak Map",
+
+                footer_history:
+                    "History"
+
+            },
+
+
+            hi: {
+
+                nav_home:
+                    "होम",
+
+                nav_scan:
+                    "स्कैन करें",
+
+                nav_history:
+                    "इतिहास",
+
+                nav_map:
+                    "प्रकोप मानचित्र",
+
+                nav_about:
+                    "हमारे बारे में",
+
+                hero_kicker:
+                    "🌱 AI आधारित फसल सुरक्षा",
+
+                hero_title_1:
+                    "स्वस्थ फसलें",
+
+                hero_title_2:
+                    "उज्ज्वल भविष्य",
+
+                hero_description:
+                    "FasalRakshak AI उन्नत कृत्रिम बुद्धिमत्ता का उपयोग करके फसल रोगों की पहचान करता है, प्रकोप की निगरानी करता है और किसानों को अपनी फसल बचाने में मदद करता है।",
+
+                feature_ai:
+                    "AI आधारित<br>पहचान",
+
+                feature_geo:
+                    "जियो-टैग्ड<br>रिपोर्ट",
+
+                feature_alert:
+                    "हाइपरलोकल<br>चेतावनी",
+
+                feature_health:
+                    "स्वास्थ्य<br>स्कोर",
+
+                mission:
+                    "🌱 स्वस्थ किसानों के लिए, साथ मिलकर",
+
+                upload_title:
+                    "फसल की फोटो अपलोड करें",
+
+                upload_subtitle:
+                    "AI से कुछ ही सेकंड में रोग पहचानें",
+
+                choose_photo:
+                    "फोटो चुनें",
+
+                drop_text:
+                    "या यहां चित्र को खींचकर छोड़ें",
+
+                supported:
+                    "समर्थित फॉर्मेट:",
+
+                max_size:
+                    "अधिकतम आकार:",
+
+                sample_title:
+                    "एक नमूना आज़माएं",
+
+                sample_text:
+                    "देखें कि FasalRakshak AI कैसे काम करता है",
+
+                sample_button:
+                    "🌿 नमूना फोटो का उपयोग करें",
+
+                disease_detected:
+                    "रोग का पता चला",
+
+                leaf_rust:
+                    "लीफ रस्ट",
+
+                confidence:
+                    "विश्वास",
+
+                visual_caption:
+                    "किसानों की<br>समृद्धि के लिए AI",
+
+                quick_scan_title:
+                    "फसल स्कैन करें",
+
+                quick_scan_text:
+                    "फोटो अपलोड करें और AI से तुरंत संभावित रोग पहचानें।",
+
+                quick_map_title:
+                    "प्रकोप मानचित्र",
+
+                quick_map_text:
+                    "स्थानीय चेतावनियां देखें और रोग गतिविधि की निगरानी करें।",
+
+                quick_history_title:
+                    "निगरानी इतिहास",
+
+                quick_history_text:
+                    "पिछली जांच देखें और समय के साथ फसल स्वास्थ्य को ट्रैक करें।",
+
+                quick_community_title:
+                    "किसान समुदाय",
+
+                quick_community_text:
+                    "रिपोर्ट साझा करें और उभरते फसल रोग पैटर्न की पहचान में मदद करें।",
+
+                how_title:
+                    "FasalRakshak AI कैसे काम करता है",
+
+                how_subtitle:
+                    "एक साधारण फसल फोटो से बुद्धिमान रोग निगरानी और हाइपरलोकल चेतावनी तक।",
+
+                step_upload:
+                    "फोटो अपलोड",
+
+                step_ai:
+                    "AI विश्लेषण",
+
+                step_verify:
+                    "विश्वसनीयता जांच",
+
+                step_map:
+                    "भौगोलिक मानचित्र",
+
+                step_alert:
+                    "हाइपरलोकल चेतावनी",
+
+                footer_text:
+                    "स्वस्थ खेतों और सुरक्षित फसल के लिए AI आधारित फसल स्वास्थ्य सुरक्षा।",
+
+                footer_scan:
+                    "फसल स्कैन",
+
+                footer_map:
+                    "प्रकोप मानचित्र",
+
+                footer_history:
+                    "इतिहास"
+
+            },
+
+
+            mr: {
+
+                nav_home:
+                    "होम",
+
+                nav_scan:
+                    "स्कॅन करा",
+
+                nav_history:
+                    "इतिहास",
+
+                nav_map:
+                    "उद्रेक नकाशा",
+
+                nav_about:
+                    "आमच्याबद्दल",
+
+                hero_kicker:
+                    "🌱 AI आधारित पीक संरक्षण",
+
+                hero_title_1:
+                    "निरोगी पिके",
+
+                hero_title_2:
+                    "उज्ज्वल भविष्य",
+
+                hero_description:
+                    "FasalRakshak AI प्रगत कृत्रिम बुद्धिमत्तेचा वापर करून पिकांचे रोग ओळखते, रोगांचा प्रादुर्भाव नियंत्रित करण्यास मदत करते आणि शेतकऱ्यांना त्यांच्या पिकांचे संरक्षण करण्यास मदत करते.",
+
+                feature_ai:
+                    "AI आधारित<br>ओळख",
+
+                feature_geo:
+                    "जिओ-टॅग्ड<br>अहवाल",
+
+                feature_alert:
+                    "हायपरलोकल<br>सूचना",
+
+                feature_health:
+                    "पीक आरोग्य<br>स्कोअर",
+
+                mission:
+                    "🌱 निरोगी शेतीसाठी एकत्रितपणे",
+
+                upload_title:
+                    "पिकाचा फोटो अपलोड करा",
+
+                upload_subtitle:
+                    "AI च्या मदतीने काही सेकंदात रोग ओळखा",
+
+                choose_photo:
+                    "फोटो निवडा",
+
+                drop_text:
+                    "किंवा येथे फोटो ड्रॅग आणि ड्रॉप करा",
+
+                supported:
+                    "समर्थित फॉरमॅट:",
+
+                max_size:
+                    "कमाल आकार:",
+
+                sample_title:
+                    "नमुना वापरून पहा",
+
+                sample_text:
+                    "FasalRakshak AI कसे काम करते ते पहा",
+
+                sample_button:
+                    "🌿 नमुना फोटो वापरा",
+
+                disease_detected:
+                    "रोग आढळला",
+
+                leaf_rust:
+                    "लीफ रस्ट",
+
+                confidence:
+                    "विश्वास पातळी",
+
+                visual_caption:
+                    "शेतकऱ्यांच्या<br>समृद्धीसाठी AI",
+
+                quick_scan_title:
+                    "पीक स्कॅन करा",
+
+                quick_scan_text:
+                    "पिकाचा फोटो अपलोड करा आणि AI च्या मदतीने संभाव्य रोग ओळखा.",
+
+                quick_map_title:
+                    "उद्रेक नकाशा",
+
+                quick_map_text:
+                    "स्थानिक सूचना पहा आणि रोगाच्या हालचालीवर लक्ष ठेवा.",
+
+                quick_history_title:
+                    "निरीक्षण इतिहास",
+
+                quick_history_text:
+                    "मागील स्कॅन पहा आणि कालांतराने पिकाच्या आरोग्यावर लक्ष ठेवा.",
+
+                quick_community_title:
+                    "शेतकरी समुदाय",
+
+                quick_community_text:
+                    "अहवाल शेअर करा आणि उद्भवणाऱ्या पीक रोगांच्या नमुन्यांची ओळख करण्यात मदत करा.",
+
+                how_title:
+                    "FasalRakshak AI कसे काम करते",
+
+                how_subtitle:
+                    "सोप्या पिकाच्या फोटोपासून बुद्धिमान रोग निरीक्षण आणि हायपरलोकल सूचनांपर्यंत.",
+
+                step_upload:
+                    "फोटो अपलोड",
+
+                step_ai:
+                    "AI विश्लेषण",
+
+                step_verify:
+                    "विश्वसनीयता तपासणी",
+
+                step_map:
+                    "भौगोलिक नकाशा",
+
+                step_alert:
+                    "हायपरलोकल सूचना",
+
+                footer_text:
+                    "निरोगी शेती आणि सुरक्षित पिकांसाठी AI आधारित पीक आरोग्य संरक्षण.",
+
+                footer_scan:
+                    "पीक स्कॅन",
+
+                footer_map:
+                    "उद्रेक नकाशा",
+
+                footer_history:
+                    "इतिहास"
+
+            }
+
+        };
+
+
+        /* =========================================================
+           LANGUAGE ENGINE
+        ========================================================= */
+
+        const languageButton =
+            document.getElementById(
+                "languageButton"
+            );
+
+
+        const languageMenu =
+            document.getElementById(
+                "languageMenu"
+            );
+
+
+        const currentLanguage =
+            document.getElementById(
+                "currentLanguage"
+            );
+
+
+        const languageInput =
+            document.getElementById(
+                "languageInput"
+            );
+
+
+        const languageNames = {
+
+            en:
+                "English",
+
+            hi:
+                "हिंदी",
+
+            mr:
+                "मराठी"
+
+        };
+
+
+        function applyLanguage(language) {
+
+            const dictionary =
+                translations[language] ||
+                translations.en;
+
+
+            document
+                .querySelectorAll(
+                    "[data-i18n]"
+                )
+                .forEach(element => {
+
+                    const key =
+                        element.dataset.i18n;
+
+
+                    if (
+                        dictionary[key] !==
+                        undefined
+                    ) {
+
+                        element.innerHTML =
+                            dictionary[key];
+
+                    }
+
+                });
+
+
+            currentLanguage.textContent =
+                languageNames[language];
+
+
+            languageInput.value =
+                language;
+
+
+            document.documentElement.lang =
+                language;
+
+
+            document
+                .querySelectorAll(
+                    ".language-option"
+                )
+                .forEach(option => {
+
+                    option.classList.toggle(
+                        "selected",
+                        option.dataset.language ===
+                        language
+                    );
+
+                });
+
+
+            /*
+             * Update navigation links so that
+             * the selected language is preserved
+             * when the user moves to another page.
+             */
+
+            document
+                .querySelectorAll(
+                    "a[href*='lang=']"
+                )
+                .forEach(link => {
+
+                    try {
+
+                        const url =
+                            new URL(
+                                link.href,
+                                window.location.origin
+                            );
+
+
+                        url.searchParams.set(
+                            "lang",
+                            language
+                        );
+
+
+                        link.href =
+                            url.toString();
+
+                    } catch (error) {
+
+                        /* Ignore malformed links. */
+
+                    }
+
+                });
+
+
+            localStorage.setItem(
+                "fasalrakshak-language",
+                language
+            );
+
+        }
+
+
+        languageButton.addEventListener(
+            "click",
+            () => {
+
+                const isOpen =
+                    languageMenu.classList.toggle(
+                        "show"
+                    );
+
+
+                languageButton.setAttribute(
+                    "aria-expanded",
+                    isOpen
+                );
+
+            }
+        );
+
+
+        document
+            .querySelectorAll(
+                ".language-option"
+            )
+            .forEach(option => {
+
+                option.addEventListener(
+                    "click",
+                    () => {
+
+                        const language =
+                            option.dataset.language;
+
+
+                        applyLanguage(
+                            language
+                        );
+
+
+                        languageMenu.classList.remove(
+                            "show"
+                        );
+
+
+                        languageButton.setAttribute(
+                            "aria-expanded",
+                            "false"
+                        );
+
+                    }
+                );
+
+            });
+
+
+        document.addEventListener(
+            "click",
+            event => {
+
+                if (
+                    !event.target.closest(
+                        ".language-wrapper"
+                    )
+                ) {
+
+                    languageMenu.classList.remove(
+                        "show"
+                    );
+
+                }
+
+            }
+        );
+
+
+        /* =========================================================
+           FILE SELECTION
+        ========================================================= */
+
+        const cropImage =
+            document.getElementById(
+                "cropImage"
+            );
+
+
+        const selectedFile =
+            document.getElementById(
+                "selectedFile"
+            );
+
+
+        cropImage.addEventListener(
+            "change",
+            event => {
+
+                const file =
+                    event.target.files[0];
+
+
+                if (!file) {
+                    return;
+                }
+
+
+                const maxSize =
+                    5 * 1024 * 1024;
+
+
+                if (
+                    file.size >
+                    maxSize
+                ) {
+
+                    alert(
+                        "Please choose an image smaller than 5MB."
+                    );
+
+
+                    cropImage.value =
+                        "";
+
+                    return;
+
+                }
+
+
+                selectedFile.style.display =
+                    "block";
+
+
+                selectedFile.textContent =
+                    "✓ " + file.name;
+
+
+                /*
+                 * Automatically submit after
+                 * the user selects the image.
+                 *
+                 * This keeps the experience simple
+                 * for farmers.
+                 */
+
+                setTimeout(
+                    () => {
+
+                        document
+                            .getElementById(
+                                "predictForm"
+                            )
+                            .submit();
+
+                    },
+                    450
+                );
+
+            }
+        );
+
+
+        /* =========================================================
+           DRAG AND DROP
+        ========================================================= */
+
+        const uploadCard =
+            document.getElementById(
+                "uploadCard"
+            );
+
+
+        [
+            "dragenter",
+            "dragover"
+        ].forEach(eventName => {
+
+            uploadCard.addEventListener(
+                eventName,
+                event => {
+
+                    event.preventDefault();
+
+                    uploadCard.style.transform =
+                        "translateY(-3px)";
+
+                    uploadCard.style.boxShadow =
+                        "0 30px 80px rgba(10, 130, 55, 0.22)";
+
+                }
+            );
+
+        });
+
+
+        [
+            "dragleave",
+            "drop"
+        ].forEach(eventName => {
+
+            uploadCard.addEventListener(
+                eventName,
+                event => {
+
+                    event.preventDefault();
+
+                    uploadCard.style.transform =
+                        "";
+
+                    uploadCard.style.boxShadow =
+                        "";
+
+                }
+            );
+
+        });
+
+
+        uploadCard.addEventListener(
+            "drop",
+            event => {
+
+                const files =
+                    event.dataTransfer.files;
+
+
+                if (
+                    !files ||
+                    !files.length
+                ) {
+                    return;
+                }
+
+
+                cropImage.files =
+                    files;
+
+
+                cropImage.dispatchEvent(
+                    new Event(
+                        "change"
+                    )
+                );
+
+            }
+        );
+
+
+        /* =========================================================
+           SAMPLE BUTTON
+        ========================================================= */
+
+        document
+            .getElementById(
+                "sampleButton"
+            )
+            .addEventListener(
+                "click",
+                () => {
+
+                    document
+                        .getElementById(
+                            "uploadCard"
+                        )
+                        .scrollIntoView({
+                            behavior:
+                                "smooth",
+                            block:
+                                "center"
+                        });
+
+
+                    setTimeout(
+                        () => {
+
+                            cropImage.click();
+
+                        },
+                        500
+                    );
+
+                }
+            );
+
+
+        /* =========================================================
+           INITIAL LANGUAGE
+        ========================================================= */
+
+        const serverLanguage =
+            "{{ language or 'en' }}";
+
+
+        const savedLanguage =
+            localStorage.getItem(
+                "fasalrakshak-language"
+            );
+
+
+        const initialLanguage =
+            (
+                serverLanguage === "hi" ||
+                serverLanguage === "mr" ||
+                serverLanguage === "en"
+            )
+                ? serverLanguage
+                : (
+                    savedLanguage ||
+                    "en"
+                );
+
+
+        applyLanguage(
+            initialLanguage
+        );
+
+    </script>
+
+</body>
+
+</html>

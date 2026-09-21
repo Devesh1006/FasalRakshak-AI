@@ -1,0 +1,2546 @@
+<!DOCTYPE html>
+<html lang="{{ language or 'en' }}">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        {{ ui.result_title }}
+    </title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='style.css') }}"
+    >
+
+    <style>
+        /* =========================================================
+           FASALRAKSHAK AI - RESULT PAGE
+        ========================================================= */
+
+        :root {
+            --green: #16833a;
+            --dark-green: #0d5427;
+            --light-green: #eaf7ed;
+            --soft-green: #f5fbf5;
+            --cream: #fbfaf3;
+            --text: #173c27;
+            --muted: #66756b;
+            --border: #dce9df;
+            --danger: #d94d45;
+            --warning: #e8a52c;
+            --blue: #2776b8;
+            --shadow: 0 12px 35px rgba(21, 79, 40, 0.10);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family:
+                Inter,
+                "Segoe UI",
+                Arial,
+                sans-serif;
+
+            color: var(--text);
+
+            background:
+                radial-gradient(
+                    circle at top left,
+                    #eff9ef 0,
+                    transparent 30%
+                ),
+                linear-gradient(
+                    135deg,
+                    #f8fbf7,
+                    #eef7ef
+                );
+
+            min-height: 100vh;
+        }
+
+        a {
+            color: inherit;
+        }
+
+        button {
+            font-family: inherit;
+        }
+
+        /* =========================================================
+           TOP NAVIGATION
+        ========================================================= */
+
+        .top-nav {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+
+            height: 78px;
+
+            background: rgba(255, 253, 246, 0.96);
+
+            border-bottom: 1px solid #e1e7df;
+
+            backdrop-filter: blur(14px);
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            padding: 0 5%;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 11px;
+
+            text-decoration: none;
+        }
+
+        .brand-mark {
+            width: 49px;
+            height: 49px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-size: 35px;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    #dff4df,
+                    #f6fff4
+                );
+
+            border-radius: 15px;
+        }
+
+        .brand-text {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .brand-name {
+            color: var(--dark-green);
+            font-size: 22px;
+            font-weight: 800;
+            line-height: 1;
+        }
+
+        .brand-tagline {
+            margin-top: 4px;
+
+            color: #4b963f;
+
+            font-size: 11px;
+            font-weight: 700;
+
+            letter-spacing: 1px;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+        }
+
+        .nav-links a {
+            padding: 11px 15px;
+
+            border-radius: 12px;
+
+            text-decoration: none;
+
+            font-size: 14px;
+            font-weight: 600;
+
+            color: #32483a;
+
+            transition: 0.2s;
+        }
+
+        .nav-links a:hover {
+            background: #edf7ef;
+            color: var(--green);
+        }
+
+        .nav-links .active {
+            color: white;
+            background: var(--green);
+        }
+
+        /* =========================================================
+           PAGE
+        ========================================================= */
+
+        .page {
+            width: min(1120px, 92%);
+            margin: 35px auto 60px;
+        }
+
+        .hero-heading {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .hero-heading .eyebrow {
+            display: inline-block;
+
+            padding: 7px 14px;
+
+            border-radius: 30px;
+
+            background: #e3f4e7;
+
+            color: var(--green);
+
+            font-size: 12px;
+            font-weight: 800;
+
+            letter-spacing: 0.5px;
+        }
+
+        .hero-heading h1 {
+            margin: 13px 0 7px;
+
+            color: var(--dark-green);
+
+            font-size: clamp(28px, 4vw, 42px);
+        }
+
+        .hero-heading p {
+            margin: 0;
+
+            color: var(--muted);
+
+            font-size: 15px;
+        }
+
+        /* =========================================================
+           MAIN RESULT
+        ========================================================= */
+
+        .result-main {
+            display: grid;
+
+            grid-template-columns:
+                minmax(320px, 0.9fr)
+                minmax(350px, 1.1fr);
+
+            gap: 22px;
+
+            margin-bottom: 22px;
+        }
+
+        .image-card,
+        .diagnosis-card {
+            background: white;
+
+            border: 1px solid var(--border);
+
+            border-radius: 24px;
+
+            box-shadow: var(--shadow);
+
+            overflow: hidden;
+        }
+
+        .image-card {
+            padding: 16px;
+        }
+
+        .image-wrapper {
+            position: relative;
+
+            min-height: 370px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 18px;
+
+            overflow: hidden;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #edf7ec,
+                    #f9fcf8
+                );
+        }
+
+        .crop-image {
+            width: 100%;
+            max-height: 420px;
+
+            object-fit: contain;
+
+            border-radius: 14px;
+        }
+
+        .image-label {
+            position: absolute;
+
+            left: 15px;
+            top: 15px;
+
+            padding: 8px 12px;
+
+            border-radius: 20px;
+
+            color: white;
+
+            background: rgba(13, 84, 39, 0.88);
+
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .diagnosis-card {
+            padding: 28px;
+        }
+
+        .diagnosis-label {
+            color: var(--muted);
+
+            font-size: 13px;
+            font-weight: 700;
+
+            text-transform: uppercase;
+
+            letter-spacing: 1px;
+        }
+
+        .diagnosis-card h2 {
+            margin: 7px 0 20px;
+
+            color: var(--dark-green);
+
+            font-size: 30px;
+        }
+
+        .diagnosis-row {
+            padding: 15px 0;
+
+            border-bottom: 1px solid #edf2ed;
+        }
+
+        .diagnosis-row:last-child {
+            border-bottom: none;
+        }
+
+        .diagnosis-row-label {
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        .diagnosis-row-value {
+            margin-top: 5px;
+
+            color: var(--text);
+
+            font-size: 19px;
+            font-weight: 750;
+        }
+
+        .confidence-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+
+            margin-top: 20px;
+
+            padding: 10px 15px;
+
+            border-radius: 30px;
+
+            background: #e6f6e9;
+
+            color: #177331;
+
+            font-size: 14px;
+            font-weight: 800;
+        }
+
+        .confidence-pill.medium {
+            background: #fff4db;
+            color: #946615;
+        }
+
+        .confidence-pill.low {
+            background: #ffe8e5;
+            color: #a73731;
+        }
+
+        /* =========================================================
+           UNCERTAIN RESULT
+        ========================================================= */
+
+        .uncertain-card {
+            margin-bottom: 22px;
+
+            padding: 22px;
+
+            border-radius: 20px;
+
+            background: #fff8e9;
+
+            border: 1px solid #efd58e;
+
+            box-shadow: var(--shadow);
+        }
+
+        .uncertain-card h2 {
+            margin-top: 0;
+
+            color: #9a6810;
+        }
+
+        .uncertain-card p {
+            color: #6c5b31;
+        }
+
+        /* =========================================================
+           HEALTH SCORE
+        ========================================================= */
+
+        .health-card {
+            position: relative;
+
+            overflow: hidden;
+
+            margin-bottom: 22px;
+
+            padding: 27px;
+
+            border-radius: 24px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #eaf8ed,
+                    #ffffff
+                );
+
+            border: 1px solid #cfe7d4;
+
+            box-shadow: var(--shadow);
+
+            text-align: center;
+        }
+
+        .health-card::after {
+            content: "";
+
+            position: absolute;
+
+            width: 180px;
+            height: 180px;
+
+            right: -70px;
+            top: -70px;
+
+            border-radius: 50%;
+
+            background: rgba(66, 168, 79, 0.08);
+        }
+
+        .health-card h2 {
+            position: relative;
+            z-index: 1;
+
+            margin: 0;
+
+            color: var(--dark-green);
+
+            font-size: 20px;
+        }
+
+        .health-score {
+            position: relative;
+            z-index: 1;
+
+            margin: 12px 0 4px;
+
+            color: var(--green);
+
+            font-size: 58px;
+            font-weight: 850;
+        }
+
+        .health-status {
+            position: relative;
+            z-index: 1;
+
+            color: var(--dark-green);
+
+            font-size: 19px;
+            font-weight: 750;
+        }
+
+        .health-grid {
+            position: relative;
+            z-index: 1;
+
+            display: grid;
+
+            grid-template-columns: repeat(3, 1fr);
+
+            gap: 12px;
+
+            margin-top: 22px;
+        }
+
+        .health-item {
+            padding: 15px;
+
+            background: rgba(255, 255, 255, 0.86);
+
+            border: 1px solid #deebe0;
+
+            border-radius: 14px;
+        }
+
+        .health-item strong {
+            display: block;
+
+            margin-bottom: 5px;
+
+            color: var(--dark-green);
+
+            font-size: 12px;
+        }
+
+        .health-item span {
+            color: #456151;
+
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .health-note {
+            position: relative;
+            z-index: 1;
+
+            margin: 18px 0 0;
+
+            color: var(--muted);
+
+            font-size: 12px;
+        }
+
+        /* =========================================================
+           RELIABILITY
+        ========================================================= */
+
+        .reliability-card {
+            margin-bottom: 22px;
+
+            padding: 24px;
+
+            background: white;
+
+            border-radius: 20px;
+
+            border: 1px solid var(--border);
+
+            box-shadow: var(--shadow);
+        }
+
+        .reliability-card h2 {
+            margin-top: 0;
+
+            color: var(--dark-green);
+        }
+
+        .reliability-top {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+
+            margin-bottom: 20px;
+        }
+
+        .reliability-number {
+            min-width: 92px;
+
+            padding: 16px 12px;
+
+            border-radius: 17px;
+
+            background: #eaf7ed;
+
+            color: var(--green);
+
+            font-size: 25px;
+            font-weight: 850;
+
+            text-align: center;
+        }
+
+        .reliability-message {
+            color: var(--muted);
+
+            font-size: 14px;
+
+            line-height: 1.6;
+        }
+
+        .reliability-bars {
+            display: grid;
+
+            grid-template-columns: repeat(3, 1fr);
+
+            gap: 10px;
+        }
+
+        .reliability-bar {
+            padding: 12px;
+
+            background: #f7faf7;
+
+            border-radius: 12px;
+        }
+
+        .reliability-bar strong {
+            display: block;
+
+            font-size: 12px;
+
+            color: var(--muted);
+
+            margin-bottom: 5px;
+        }
+
+        .reliability-bar span {
+            color: var(--dark-green);
+
+            font-size: 14px;
+            font-weight: 750;
+        }
+
+        /* =========================================================
+           TOP PREDICTIONS
+        ========================================================= */
+
+        .predictions-card {
+            margin-bottom: 22px;
+
+            padding: 24px;
+
+            background: white;
+
+            border-radius: 20px;
+
+            border: 1px solid var(--border);
+
+            box-shadow: var(--shadow);
+        }
+
+        .predictions-card h2 {
+            margin-top: 0;
+
+            color: var(--dark-green);
+        }
+
+        .prediction {
+            display: grid;
+
+            grid-template-columns: 35px 1fr 65px;
+
+            align-items: center;
+
+            gap: 10px;
+
+            padding: 13px 0;
+
+            border-bottom: 1px solid #edf2ed;
+        }
+
+        .prediction:last-child {
+            border-bottom: none;
+        }
+
+        .prediction-rank {
+            width: 28px;
+            height: 28px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 50%;
+
+            background: #edf7ef;
+
+            color: var(--green);
+
+            font-size: 12px;
+            font-weight: 800;
+        }
+
+        .prediction-name {
+            font-weight: 650;
+        }
+
+        .prediction-percent {
+            text-align: right;
+
+            color: var(--green);
+
+            font-weight: 800;
+        }
+
+        /* =========================================================
+           INFORMATION
+        ========================================================= */
+
+        .info-grid {
+            display: grid;
+
+            grid-template-columns: repeat(3, 1fr);
+
+            gap: 18px;
+
+            margin-bottom: 22px;
+        }
+
+        .info-card {
+            background: white;
+
+            padding: 23px;
+
+            border-radius: 20px;
+
+            border: 1px solid var(--border);
+
+            box-shadow: var(--shadow);
+        }
+
+        .info-icon {
+            width: 43px;
+            height: 43px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            margin-bottom: 13px;
+
+            border-radius: 13px;
+
+            background: #eaf7ed;
+
+            font-size: 21px;
+        }
+
+        .info-card h2 {
+            margin: 0 0 12px;
+
+            color: var(--dark-green);
+
+            font-size: 18px;
+        }
+
+        .info-card ul {
+            padding-left: 18px;
+
+            margin-bottom: 0;
+        }
+
+        .info-card li {
+            margin-bottom: 9px;
+
+            color: #52655a;
+
+            font-size: 13px;
+
+            line-height: 1.5;
+        }
+
+        .advisory-note {
+            padding: 11px;
+
+            border-radius: 10px;
+
+            background: #fffbe8;
+
+            color: #75632e;
+
+            font-size: 12px;
+        }
+
+        /* =========================================================
+           NEARBY ALERT
+        ========================================================= */
+
+        .nearby-card {
+            margin-bottom: 22px;
+
+            padding: 25px;
+
+            border-radius: 22px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #edf7ff,
+                    #ffffff
+                );
+
+            border: 1px solid #cfe3f5;
+
+            box-shadow: var(--shadow);
+        }
+
+        .nearby-card h2 {
+            margin-top: 0;
+
+            color: #1769a8;
+        }
+
+        .nearby-card p {
+            color: #5c6f7c;
+
+            line-height: 1.6;
+        }
+
+        .nearby-buttons {
+            display: grid;
+
+            grid-template-columns: 1fr 1fr;
+
+            gap: 10px;
+
+            margin-top: 16px;
+        }
+
+        .primary-btn,
+        .secondary-btn,
+        .danger-btn {
+            border: none;
+
+            padding: 13px 18px;
+
+            border-radius: 12px;
+
+            cursor: pointer;
+
+            font-weight: 750;
+
+            font-size: 14px;
+
+            transition: 0.2s;
+        }
+
+        .primary-btn {
+            color: white;
+
+            background: var(--green);
+        }
+
+        .secondary-btn {
+            color: #1769a8;
+
+            background: #e9f4fc;
+
+            border: 1px solid #c8deed;
+        }
+
+        .primary-btn:hover,
+        .secondary-btn:hover,
+        .danger-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .nearby-status {
+            margin-top: 15px;
+
+            padding: 16px;
+
+            border-radius: 13px;
+
+            background: white;
+
+            border: 1px solid #dce8ee;
+        }
+
+        .nearby-status.active {
+            border-left: 5px solid var(--danger);
+        }
+
+        .nearby-status.safe {
+            border-left: 5px solid var(--green);
+        }
+
+        .nearby-item {
+            margin-top: 10px;
+
+            padding: 14px;
+
+            border-radius: 12px;
+
+            background: #f7fafc;
+        }
+
+        .nearby-metrics {
+            display: grid;
+
+            grid-template-columns: repeat(3, 1fr);
+
+            gap: 8px;
+
+            margin-top: 10px;
+        }
+
+        .nearby-metric {
+            padding: 10px;
+
+            border-radius: 9px;
+
+            background: white;
+
+            font-size: 12px;
+        }
+
+        .nearby-metric strong {
+            display: block;
+
+            color: #1769a8;
+
+            margin-bottom: 3px;
+        }
+
+        /* =========================================================
+           RELIABILITY DETAILS
+        ========================================================= */
+
+        .technical-card {
+            margin-bottom: 22px;
+
+            padding: 22px;
+
+            background: #f8fbf8;
+
+            border: 1px solid #dce9df;
+
+            border-radius: 18px;
+        }
+
+        .technical-card summary {
+            cursor: pointer;
+
+            color: var(--dark-green);
+
+            font-weight: 750;
+        }
+
+        .technical-grid {
+            display: grid;
+
+            grid-template-columns: repeat(4, 1fr);
+
+            gap: 10px;
+
+            margin-top: 15px;
+        }
+
+        .technical-item {
+            padding: 12px;
+
+            background: white;
+
+            border-radius: 10px;
+
+            font-size: 12px;
+        }
+
+        .technical-item strong {
+            display: block;
+
+            margin-bottom: 5px;
+
+            color: var(--muted);
+        }
+
+        /* =========================================================
+           ACTION BUTTONS
+        ========================================================= */
+
+        .bottom-actions {
+            display: flex;
+
+            justify-content: center;
+
+            flex-wrap: wrap;
+
+            gap: 10px;
+
+            margin-top: 30px;
+        }
+
+        .bottom-actions a {
+            text-decoration: none;
+        }
+
+        .bottom-actions button {
+            min-width: 190px;
+        }
+
+        /* =========================================================
+           FOOTER
+        ========================================================= */
+
+        .footer {
+            margin-top: 40px;
+
+            padding: 20px;
+
+            text-align: center;
+
+            color: #708076;
+
+            font-size: 12px;
+        }
+
+        /* =========================================================
+           MOBILE
+        ========================================================= */
+
+        @media (max-width: 850px) {
+
+            .nav-links a:nth-child(4),
+            .nav-links a:nth-child(5) {
+                display: none;
+            }
+
+            .result-main {
+                grid-template-columns: 1fr;
+            }
+
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .health-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .reliability-bars {
+                grid-template-columns: 1fr;
+            }
+
+            .technical-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (max-width: 600px) {
+
+            .top-nav {
+                height: auto;
+
+                padding: 12px 4%;
+
+                gap: 8px;
+            }
+
+            .brand-name {
+                font-size: 17px;
+            }
+
+            .brand-tagline {
+                font-size: 8px;
+            }
+
+            .brand-mark {
+                width: 40px;
+                height: 40px;
+                font-size: 28px;
+            }
+
+            .nav-links a {
+                padding: 8px;
+
+                font-size: 11px;
+            }
+
+            .page {
+                width: 94%;
+
+                margin-top: 24px;
+            }
+
+            .image-wrapper {
+                min-height: 260px;
+            }
+
+            .diagnosis-card {
+                padding: 20px;
+            }
+
+            .diagnosis-card h2 {
+                font-size: 24px;
+            }
+
+            .health-score {
+                font-size: 47px;
+            }
+
+            .nearby-buttons {
+                grid-template-columns: 1fr;
+            }
+
+            .nearby-metrics {
+                grid-template-columns: 1fr;
+            }
+
+            .technical-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .reliability-top {
+                align-items: flex-start;
+
+                flex-direction: column;
+            }
+
+            .bottom-actions {
+                flex-direction: column;
+            }
+
+            .bottom-actions button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+
+<body data-language="{{ language or 'en' }}">
+
+    <!-- =========================================================
+         NAVIGATION
+    ========================================================= -->
+
+    <header class="top-nav">
+
+        <a
+            class="brand"
+            href="/?lang={{ language or 'en' }}"
+        >
+
+            <div class="brand-mark">
+                🌿
+            </div>
+
+            <div class="brand-text">
+
+                <div class="brand-name">
+                    FasalRakshak AI
+                </div>
+
+                <div class="brand-tagline">
+                    CROP HEALTH AI
+                </div>
+
+            </div>
+
+        </a>
+
+
+        <nav class="nav-links">
+
+            <a href="/?lang={{ language or 'en' }}">
+                🏠 Home
+            </a>
+
+            <a
+                class="active"
+                href="/?lang={{ language or 'en' }}"
+            >
+                📷 Scan
+            </a>
+
+            <a href="/history?lang={{ language or 'en' }}">
+                🕘 History
+            </a>
+
+            <a href="/outbreak-map?lang={{ language or 'en' }}">
+                📍 Outbreak Map
+            </a>
+
+            <a href="/?lang={{ language or 'en' }}">
+                ⓘ About
+            </a>
+
+        </nav>
+
+    </header>
+
+
+    <main class="page">
+
+
+        <!-- =====================================================
+             HERO
+        ====================================================== -->
+
+        <section class="hero-heading">
+
+            <span class="eyebrow">
+                🌱 AI-POWERED CROP HEALTH ANALYSIS
+            </span>
+
+            <h1>
+                {{ ui.result_title }}
+            </h1>
+
+            <p>
+                Your crop image has been analyzed by FasalRakshak AI.
+            </p>
+
+        </section>
+
+
+        <!-- =====================================================
+             MAIN DIAGNOSIS
+        ====================================================== -->
+
+        {% if confidence_status == "low" %}
+
+            <section class="uncertain-card">
+
+                <h2>
+                    ⚠️ {{ ui.ai_uncertain }}
+                </h2>
+
+                <p>
+                    <strong>
+                        {{ ui.no_reliable_diagnosis }}
+                    </strong>
+                </p>
+
+                <p>
+                    {{ ui.uncertain_text }}
+                </p>
+
+                <p>
+                    {{ ui.clearer_image }}
+                </p>
+
+            </section>
+
+        {% endif %}
+
+
+        <section class="result-main">
+
+
+            <!-- IMAGE -->
+
+            <div class="image-card">
+
+                <div class="image-wrapper">
+
+                    <span class="image-label">
+                        📷 Analyzed Crop
+                    </span>
+
+                    <img
+                        src="{{ url_for('static', filename='uploads/' + image) }}"
+                        class="crop-image"
+                        alt="Uploaded crop image"
+                    >
+
+                </div>
+
+            </div>
+
+
+            <!-- DIAGNOSIS -->
+
+            <div class="diagnosis-card">
+
+                <div class="diagnosis-label">
+                    AI DIAGNOSIS
+                </div>
+
+
+                {% if confidence_status != "low" %}
+
+                    <h2>
+                        {{ display_disease }}
+                    </h2>
+
+                {% else %}
+
+                    <h2>
+                        {{ ui.ai_uncertain }}
+                    </h2>
+
+                {% endif %}
+
+
+                <div class="diagnosis-row">
+
+                    <div class="diagnosis-row-label">
+                        {{ ui.crop }}
+                    </div>
+
+                    <div class="diagnosis-row-value">
+                        {{ display_crop }}
+                    </div>
+
+                </div>
+
+
+                <div class="diagnosis-row">
+
+                    <div class="diagnosis-row-label">
+                        {{ ui.disease }}
+                    </div>
+
+                    <div class="diagnosis-row-value">
+                        {{ display_disease }}
+                    </div>
+
+                </div>
+
+
+                <div class="confidence-pill
+                    {% if confidence_status == 'medium' %}
+                        medium
+                    {% elif confidence_status == 'low' %}
+                        low
+                    {% endif %}
+                ">
+
+                    {% if confidence_status == "high" %}
+                        🟢
+                    {% elif confidence_status == "medium" %}
+                        🟡
+                    {% else %}
+                        🔴
+                    {% endif %}
+
+                    {{ confidence }}% AI Confidence
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+             CROP HEALTH SCORE
+        ====================================================== -->
+
+        <section class="health-card">
+
+            <h2>
+                💚 {{ health_ui.title }}
+            </h2>
+
+
+            {% if health_score is none %}
+
+                <div class="health-score">
+                    —
+                </div>
+
+                <div class="health-status">
+                    ⚠️ {{ health_ui.unavailable }}
+                </div>
+
+                <p class="health-note">
+                    {{ health_ui.unavailable_text }}
+                </p>
+
+            {% else %}
+
+                <div class="health-score">
+                    {{ health_score }}
+                    <small>/100</small>
+                </div>
+
+
+                <div class="health-status">
+                    {{ health_status }}
+                </div>
+
+
+                <div class="health-grid">
+
+                    <div class="health-item">
+
+                        <strong>
+                            {{ health_ui.reliability }}
+                        </strong>
+
+                        <span>
+                            {{ confidence }}%
+                        </span>
+
+                    </div>
+
+
+                    <div class="health-item">
+
+                        <strong>
+                            {{ health_ui.risk }}
+                        </strong>
+
+                        <span>
+
+                            {% if display_disease|lower in
+                                ['healthy', 'स्वस्थ', 'निरोगी'] %}
+
+                                {{ health_ui.low }}
+
+                            {% elif confidence >= 75 %}
+
+                                {{ health_ui.high }}
+
+                            {% else %}
+
+                                {{ health_ui.moderate }}
+
+                            {% endif %}
+
+                        </span>
+
+                    </div>
+
+
+                    <div class="health-item">
+
+                        <strong>
+                            {{ health_ui.quality }}
+                        </strong>
+
+                        <span>
+
+                            {% if reliability_reasons|length == 0 %}
+
+                                {{ health_ui.good_quality }}
+
+                            {% else %}
+
+                                {{ health_ui.fair_quality }}
+
+                            {% endif %}
+
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <p class="health-note">
+                    {{ health_ui.score_note }}
+                </p>
+
+            {% endif %}
+
+        </section>
+
+
+        {% if confidence_status != "low" %}
+
+
+        <!-- =====================================================
+             AI RELIABILITY
+        ====================================================== -->
+
+        <section class="reliability-card">
+
+            <h2>
+                🛡️ {{ ui.ai_reliability }}
+            </h2>
+
+
+            <div class="reliability-top">
+
+                <div class="reliability-number">
+                    {{ confidence }}%
+                </div>
+
+
+                <div class="reliability-message">
+
+                    {% if confidence_status == "high" %}
+
+                        <strong>
+                            {{ ui.high_confidence }}
+                        </strong>
+
+                    {% elif confidence_status == "medium" %}
+
+                        <strong>
+                            {{ ui.moderate_confidence }}
+                        </strong>
+
+                    {% else %}
+
+                        <strong>
+                            {{ ui.ai_uncertain }}
+                        </strong>
+
+                    {% endif %}
+
+                    <br>
+
+                    {{ reliability_message }}
+
+                </div>
+
+            </div>
+
+
+            <div class="reliability-bars">
+
+                <div class="reliability-bar">
+
+                    <strong>
+                        Feature Similarity
+                    </strong>
+
+                    <span>
+                        {{ predicted_similarity }}
+                    </span>
+
+                </div>
+
+
+                <div class="reliability-bar">
+
+                    <strong>
+                        View Consistency
+                    </strong>
+
+                    <span>
+                        {{ agreement }}/3
+                    </span>
+
+                </div>
+
+
+                <div class="reliability-bar">
+
+                    <strong>
+                        Prediction Margin
+                    </strong>
+
+                    <span>
+                        {{ margin }}%
+                    </span>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+             TOP PREDICTIONS
+        ====================================================== -->
+
+        <section class="predictions-card">
+
+            <h2>
+                🔎 {{ ui.top_predictions }}
+            </h2>
+
+
+            <div class="prediction">
+
+                <span class="prediction-rank">
+                    1
+                </span>
+
+                <span class="prediction-name">
+                    {{ top1_name }}
+                </span>
+
+                <span class="prediction-percent">
+                    {{ confidence }}%
+                </span>
+
+            </div>
+
+
+            <div class="prediction">
+
+                <span class="prediction-rank">
+                    2
+                </span>
+
+                <span class="prediction-name">
+                    {{ top2_name }}
+                </span>
+
+                <span class="prediction-percent">
+                    {{ top2_confidence }}%
+                </span>
+
+            </div>
+
+
+            <div class="prediction">
+
+                <span class="prediction-rank">
+                    3
+                </span>
+
+                <span class="prediction-name">
+                    {{ top3_name }}
+                </span>
+
+                <span class="prediction-percent">
+                    {{ top3_confidence }}%
+                </span>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+             DISEASE INFORMATION
+        ====================================================== -->
+
+        <section class="info-grid">
+
+
+            <!-- SYMPTOMS -->
+
+            <div class="info-card">
+
+                <div class="info-icon">
+                    🔍
+                </div>
+
+                <h2>
+                    {{ ui.symptoms }}
+                </h2>
+
+                <ul>
+
+                    {% for item in information.symptoms %}
+
+                        <li>
+                            {{ item }}
+                        </li>
+
+                    {% endfor %}
+
+                </ul>
+
+            </div>
+
+
+            <!-- FERTILIZER -->
+
+            <div class="info-card">
+
+                <div class="info-icon">
+                    🌱
+                </div>
+
+                <h2>
+                    {{ ui.fertilizer }}
+                </h2>
+
+                <ul>
+
+                    {% for item in information.fertilizer %}
+
+                        <li>
+                            {{ item }}
+                        </li>
+
+                    {% endfor %}
+
+                </ul>
+
+
+                <div class="advisory-note">
+
+                    {{ ui.advisory_note }}
+
+                </div>
+
+            </div>
+
+
+            <!-- PREVENTION -->
+
+            <div class="info-card">
+
+                <div class="info-icon">
+                    🛡️
+                </div>
+
+                <h2>
+                    {{ ui.prevention }}
+                </h2>
+
+                <ul>
+
+                    {% for item in information.prevention %}
+
+                        <li>
+                            {{ item }}
+                        </li>
+
+                    {% endfor %}
+
+                </ul>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+             NEARBY ALERT
+        ====================================================== -->
+
+        <section class="nearby-card">
+
+            <h2>
+                📍 Nearby Disease Alert
+            </h2>
+
+            <p>
+                Check whether this detected disease has an
+                active, evidence-weighted outbreak near you.
+            </p>
+
+
+            <div class="nearby-buttons">
+
+                <button
+                    id="nearbyAlertButton"
+                    class="primary-btn"
+                    type="button"
+                    data-endpoint="{{ url_for('nearby_alert') }}"
+                    data-disease="{{ raw_disease }}"
+                >
+                    🔎 Check Nearby Alerts
+                </button>
+
+
+                <button
+                    id="demoNearbyAlertButton"
+                    class="secondary-btn"
+                    type="button"
+                    data-endpoint="{{ url_for('demo_nearby_alert') }}"
+                >
+                    🎬 Demo Nearby Alert
+                </button>
+
+            </div>
+
+
+            <div
+                id="nearbyAlertStatus"
+                class="nearby-status"
+                hidden
+            ></div>
+
+        </section>
+
+
+        <!-- =====================================================
+             BETTER IMAGE TIPS
+        ====================================================== -->
+
+        <section class="info-card">
+
+            <div class="info-icon">
+                📸
+            </div>
+
+            <h2>
+                {{ ui.better_image }}
+            </h2>
+
+            <ul>
+
+                <li>
+                    {{ ui.tip1 }}
+                </li>
+
+                <li>
+                    {{ ui.tip2 }}
+                </li>
+
+                <li>
+                    {{ ui.tip3 }}
+                </li>
+
+                <li>
+                    {{ ui.tip4 }}
+                </li>
+
+                <li>
+                    {{ ui.tip5 }}
+                </li>
+
+            </ul>
+
+        </section>
+
+
+        <!-- =====================================================
+             TECHNICAL RELIABILITY
+        ====================================================== -->
+
+        <details class="technical-card">
+
+            <summary>
+                ⚙️ {{ ui.reliability_check }}
+            </summary>
+
+
+            <div class="technical-grid">
+
+                <div class="technical-item">
+
+                    <strong>
+                        {{ ui.feature_similarity }}
+                    </strong>
+
+                    {{ predicted_similarity }}
+
+                </div>
+
+
+                <div class="technical-item">
+
+                    <strong>
+                        {{ ui.required_similarity }}
+                    </strong>
+
+                    {{ similarity_threshold }}
+
+                </div>
+
+
+                <div class="technical-item">
+
+                    <strong>
+                        {{ ui.closest_class }}
+                    </strong>
+
+                    {{ nearest_reference_name }}
+
+                </div>
+
+
+                <div class="technical-item">
+
+                    <strong>
+                        {{ ui.view_consistency }}
+                    </strong>
+
+                    {{ agreement }}/3
+
+                </div>
+
+
+                <div class="technical-item">
+
+                    <strong>
+                        {{ ui.prediction_margin }}
+                    </strong>
+
+                    {{ margin }}%
+
+                </div>
+
+            </div>
+
+        </details>
+
+
+        {% else %}
+
+
+        <!-- =====================================================
+             UNCERTAIN MODEL RESULT
+        ====================================================== -->
+
+        <section class="uncertain-card">
+
+            <h2>
+                ⚠️ {{ ui.ai_uncertain }}
+            </h2>
+
+            <p>
+                {{ ui.uncertain_text }}
+            </p>
+
+
+            {% if reliability_reasons %}
+
+                <h3>
+                    {{ ui.why_unreliable }}
+                </h3>
+
+                <ul>
+
+                    {% for reason in reliability_reasons %}
+
+                        <li>
+                            {{ reason }}
+                        </li>
+
+                    {% endfor %}
+
+                </ul>
+
+            {% endif %}
+
+
+            <p>
+                {{ ui.clearer_image }}
+            </p>
+
+        </section>
+
+
+        {% endif %}
+
+
+        <!-- =====================================================
+             BOTTOM ACTIONS
+        ====================================================== -->
+
+        <div class="bottom-actions">
+
+
+            <a
+                href="/?lang={{ language or 'en' }}"
+            >
+
+                <button class="primary-btn">
+                    📷 {{ ui.check_another }}
+                </button>
+
+            </a>
+
+
+            <a
+                href="/history?lang={{ language or 'en' }}"
+            >
+
+                <button class="secondary-btn">
+                    📊 Monitoring History
+                </button>
+
+            </a>
+
+
+            <a
+                href="/outbreak-map?lang={{ language or 'en' }}"
+            >
+
+                <button class="secondary-btn">
+                    🗺️ Outbreak Map
+                </button>
+
+            </a>
+
+        </div>
+
+
+        <!-- =====================================================
+             FOOTER
+        ====================================================== -->
+
+        <footer class="footer">
+
+            🌿 FasalRakshak AI
+
+            <br>
+
+            AI for healthier crops and smarter farming.
+
+        </footer>
+
+    </main>
+
+
+    <!-- =========================================================
+         NEARBY ALERT JAVASCRIPT
+    ========================================================= -->
+
+    <script>
+
+        (function () {
+
+            const button =
+                document.getElementById(
+                    "nearbyAlertButton"
+                );
+
+            const demoButton =
+                document.getElementById(
+                    "demoNearbyAlertButton"
+                );
+
+            const statusBox =
+                document.getElementById(
+                    "nearbyAlertStatus"
+                );
+
+
+            if (!button || !statusBox) {
+                return;
+            }
+
+
+            const language =
+                document.body.dataset.language || "en";
+
+
+            const text = {
+
+                en: {
+                    locating:
+                        "Requesting your location...",
+
+                    denied:
+                        "Location permission was denied. You can still open the outbreak map.",
+
+                    unsupported:
+                        "This browser does not support location access.",
+
+                    error:
+                        "We could not read your location. Please try again.",
+
+                    active:
+                        "🚨 Nearby evidence-weighted alert",
+
+                    safe:
+                        "✅ No active evidence-weighted alert nearby",
+
+                    distance:
+                        "Distance",
+
+                    evidence:
+                        "Evidence",
+
+                    locations:
+                        "Independent locations",
+
+                    confidence:
+                        "AI confidence",
+
+                    reports:
+                        "photo reports",
+
+                    map:
+                        "Open Disease Alert Map"
+                },
+
+
+                hi: {
+                    locating:
+                        "आपका स्थान प्राप्त किया जा रहा है...",
+
+                    denied:
+                        "स्थान की अनुमति नहीं मिली। आप फिर भी रोग चेतावनी मानचित्र खोल सकते हैं।",
+
+                    unsupported:
+                        "यह ब्राउज़र स्थान सुविधा का समर्थन नहीं करता।",
+
+                    error:
+                        "आपका स्थान प्राप्त नहीं हो सका। कृपया फिर प्रयास करें।",
+
+                    active:
+                        "🚨 पास में प्रमाण-आधारित चेतावनी",
+
+                    safe:
+                        "✅ पास में कोई सक्रिय प्रमाण-आधारित चेतावनी नहीं",
+
+                    distance:
+                        "दूरी",
+
+                    evidence:
+                        "प्रमाण स्कोर",
+
+                    locations:
+                        "स्वतंत्र स्थान",
+
+                    confidence:
+                        "AI विश्वास",
+
+                    reports:
+                        "फोटो रिपोर्ट",
+
+                    map:
+                        "रोग चेतावनी मानचित्र खोलें"
+                },
+
+
+                mr: {
+                    locating:
+                        "तुमचे स्थान मिळवत आहे...",
+
+                    denied:
+                        "स्थानाची परवानगी मिळाली नाही. तुम्ही रोग इशारा नकाशा उघडू शकता.",
+
+                    unsupported:
+                        "या ब्राउझरमध्ये स्थान सुविधा उपलब्ध नाही.",
+
+                    error:
+                        "तुमचे स्थान मिळवता आले नाही. कृपया पुन्हा प्रयत्न करा.",
+
+                    active:
+                        "🚨 जवळपास पुराव्यावर आधारित इशारा",
+
+                    safe:
+                        "✅ जवळपास सक्रिय पुराव्यावर आधारित इशारा नाही",
+
+                    distance:
+                        "अंतर",
+
+                    evidence:
+                        "पुरावा स्कोअर",
+
+                    locations:
+                        "स्वतंत्र ठिकाणे",
+
+                    confidence:
+                        "AI विश्वास",
+
+                    reports:
+                        "फोटो अहवाल",
+
+                    map:
+                        "रोग इशारा नकाशा उघडा"
+                }
+
+            };
+
+
+            const t =
+                text[language] || text.en;
+
+
+            function showMessage(
+                message,
+                active
+            ) {
+
+                statusBox.hidden = false;
+
+                statusBox.className =
+                    "nearby-status" +
+                    (
+                        active
+                            ? " active"
+                            : " safe"
+                    );
+
+                statusBox.textContent =
+                    message;
+            }
+
+
+            function renderAlerts(data) {
+
+                statusBox.hidden = false;
+
+
+                if (
+                    !data.alert ||
+                    !data.alerts ||
+                    data.alerts.length === 0
+                ) {
+
+                    statusBox.className =
+                        "nearby-status safe";
+
+
+                    const count =
+                        Number(
+                            data.nearby_report_count || 0
+                        );
+
+
+                    statusBox.innerHTML =
+
+                        "<strong>" +
+                        t.safe +
+                        "</strong>" +
+
+                        "<p>" +
+                        count +
+                        " " +
+                        t.reports +
+                        " were found nearby, but they do not currently meet the evidence-weighted alert threshold.</p>" +
+
+                        "<a href='/outbreak-map?lang=" +
+                        language +
+                        "'>" +
+                        t.map +
+                        "</a>";
+
+                    return;
+                }
+
+
+                statusBox.className =
+                    "nearby-status active";
+
+
+                let html =
+                    "<strong>" +
+                    t.active +
+                    "</strong>";
+
+
+                data.alerts.forEach(
+                    function (alert) {
+
+                        html +=
+
+                            "<div class='nearby-item'>" +
+
+                            "<strong>" +
+                            alert.severity +
+                            " — " +
+                            alert.crop +
+                            "</strong>" +
+
+                            "<div>" +
+                            alert.disease +
+                            "</div>" +
+
+                            "<div class='nearby-metrics'>" +
+
+                            "<div class='nearby-metric'>" +
+                            "<strong>" +
+                            t.distance +
+                            "</strong>" +
+                            Number(
+                                alert.distance_km
+                            ).toFixed(2) +
+                            " km</div>" +
+
+                            "<div class='nearby-metric'>" +
+                            "<strong>" +
+                            t.evidence +
+                            "</strong>" +
+                            alert.evidence_score +
+                            "/100</div>" +
+
+                            "<div class='nearby-metric'>" +
+                            "<strong>" +
+                            t.locations +
+                            "</strong>" +
+                            alert.independent_locations +
+                            "</div>" +
+
+                            "</div>" +
+
+                            "<p>" +
+                            t.confidence +
+                            ": " +
+                            alert.confidence +
+                            "%</p>" +
+
+                            "</div>";
+
+                    }
+                );
+
+
+                html +=
+
+                    "<p>" +
+                    "Alert strength is based on independent photo-confirmed evidence, not raw report count." +
+                    "</p>" +
+
+                    "<a href='/outbreak-map?lang=" +
+                    language +
+                    "'>" +
+                    t.map +
+                    "</a>";
+
+
+                statusBox.innerHTML =
+                    html;
+            }
+
+
+            /* =====================================================
+               DEMO ALERT
+            ===================================================== */
+
+            if (demoButton) {
+
+                demoButton.addEventListener(
+                    "click",
+                    function () {
+
+                        demoButton.disabled =
+                            true;
+
+                        statusBox.hidden =
+                            false;
+
+                        statusBox.className =
+                            "nearby-status";
+
+                        statusBox.textContent =
+                            "Running evidence demo...";
+
+
+                        fetch(
+                            demoButton.dataset.endpoint,
+                            {
+                                method: "POST",
+
+                                headers: {
+                                    "Accept":
+                                        "application/json"
+                                }
+                            }
+                        )
+
+                            .then(
+                                response =>
+                                    response.json()
+                            )
+
+                            .then(
+                                data => {
+
+                                    if (!data.ok) {
+
+                                        showMessage(
+                                            data.message ||
+                                            t.error,
+                                            false
+                                        );
+
+                                        return;
+                                    }
+
+
+                                    renderAlerts(
+                                        data
+                                    );
+
+                                }
+                            )
+
+                            .catch(
+                                () => {
+
+                                    showMessage(
+                                        t.error,
+                                        false
+                                    );
+
+                                }
+                            )
+
+                            .finally(
+                                () => {
+
+                                    demoButton.disabled =
+                                        false;
+
+                                }
+                            );
+
+                    }
+                );
+
+            }
+
+
+            /* =====================================================
+               REAL LOCATION ALERT
+            ===================================================== */
+
+            button.addEventListener(
+                "click",
+                function () {
+
+                    if (
+                        !navigator.geolocation
+                    ) {
+
+                        showMessage(
+                            t.unsupported,
+                            false
+                        );
+
+                        return;
+                    }
+
+
+                    button.disabled =
+                        true;
+
+                    showMessage(
+                        t.locating,
+                        false
+                    );
+
+
+                    navigator.geolocation.getCurrentPosition(
+
+                        function (position) {
+
+                            fetch(
+                                button.dataset.endpoint,
+                                {
+                                    method: "POST",
+
+                                    headers: {
+                                        "Content-Type":
+                                            "application/json"
+                                    },
+
+                                    body: JSON.stringify({
+
+                                        latitude:
+                                            position.coords.latitude,
+
+                                        longitude:
+                                            position.coords.longitude,
+
+                                        disease:
+                                            button.dataset.disease,
+
+                                        radius_km:
+                                            5
+                                    })
+                                }
+                            )
+
+                                .then(
+                                    response =>
+                                        response.json()
+                                )
+
+                                .then(
+                                    data => {
+
+                                        if (!data.ok) {
+
+                                            showMessage(
+                                                data.message ||
+                                                t.error,
+                                                false
+                                            );
+
+                                            return;
+                                        }
+
+
+                                        renderAlerts(
+                                            data
+                                        );
+
+                                    }
+                                )
+
+                                .catch(
+                                    () => {
+
+                                        showMessage(
+                                            t.error,
+                                            false
+                                        );
+
+                                    }
+                                )
+
+                                .finally(
+                                    () => {
+
+                                        button.disabled =
+                                            false;
+
+                                    }
+                                );
+
+                        },
+
+
+                        function (error) {
+
+                            if (
+                                error &&
+                                error.code === 1
+                            ) {
+
+                                showMessage(
+                                    t.denied,
+                                    false
+                                );
+
+                            } else {
+
+                                showMessage(
+                                    t.error,
+                                    false
+                                );
+
+                            }
+
+
+                            button.disabled =
+                                false;
+
+                        },
+
+
+                        {
+                            enableHighAccuracy:
+                                true,
+
+                            timeout:
+                                10000,
+
+                            maximumAge:
+                                300000
+                        }
+
+                    );
+
+                }
+            );
+
+        })();
+
+    </script>
+
+</body>
+</html>

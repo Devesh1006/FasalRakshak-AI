@@ -1,0 +1,1579 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>{{ map_ui.title }}</title>
+
+    <link
+        rel="stylesheet"
+        href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    >
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f3f8f4;
+            color: #25352a;
+        }
+
+        .page {
+            width: min(1120px, 94%);
+            margin: 25px auto;
+        }
+
+        .header,
+        .card,
+        .stat {
+            background: #ffffff;
+            border-radius: 18px;
+            box-shadow: 0 5px 18px rgba(0, 0, 0, 0.08);
+        }
+
+        .header {
+            padding: 24px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            margin: 0 0 8px;
+            color: #237a35;
+        }
+
+        h2 {
+            color: #237a35;
+            margin-top: 0;
+        }
+
+        .subtitle {
+            color: #65736a;
+            margin: 0;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .stat {
+            padding: 18px;
+            min-height: 105px;
+        }
+
+        .stat-number {
+            font-size: 28px;
+            font-weight: bold;
+            color: #237a35;
+        }
+
+        .stat-label {
+            color: #69776d;
+            font-size: 13px;
+            margin-top: 5px;
+        }
+
+        .stat-value {
+            font-weight: bold;
+            margin-top: 9px;
+            font-size: 15px;
+        }
+
+        .card {
+            padding: 22px;
+            margin-bottom: 20px;
+        }
+
+        .alert-box {
+            border-left: 6px solid #d9534f;
+            background: #fff5f4;
+        }
+
+        /* =====================================================
+           EVIDENCE DEMO
+        ===================================================== */
+
+        .demo-card {
+            background: #eef7ff;
+            border: 1px solid #cfe3f5;
+            border-radius: 14px;
+            padding: 20px;
+            margin-bottom: 20px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            gap: 18px;
+            flex-wrap: wrap;
+        }
+
+        .demo-actions {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            gap: 18px;
+            flex-wrap: wrap;
+        }
+
+        .demo-card button {
+            background: #1769aa;
+            min-width: 190px;
+        }
+
+        button {
+            border: none;
+            border-radius: 9px;
+            padding: 11px 16px;
+            cursor: pointer;
+            background: #2d7d35;
+            color: white;
+            font-size: 14px;
+        }
+
+        button:hover {
+            opacity: 0.92;
+        }
+
+        button:disabled {
+            opacity: 0.6;
+            cursor: wait;
+        }
+
+        .small {
+            color: #69776d;
+            font-size: 13px;
+        }
+
+        .alert-item {
+            padding: 16px;
+            margin: 10px 0;
+            border-radius: 12px;
+            background: #ffffff;
+            border-left: 6px solid #f0ad4e;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+        }
+
+        .alert-item.high {
+            border-left-color: #d9534f;
+        }
+
+        .alert-item.moderate {
+            border-left-color: #f0ad4e;
+        }
+
+        .alert-item.watch {
+            border-left-color: #5a9b62;
+        }
+
+        .badge {
+            display: inline-block;
+            border-radius: 20px;
+            padding: 5px 10px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .badge.high {
+            background: #ffe1df;
+            color: #b52b27;
+        }
+
+        .badge.moderate {
+            background: #fff0d6;
+            color: #9a6100;
+        }
+
+        .badge.watch {
+            background: #e4f5e7;
+            color: #277333;
+        }
+
+        .evidence {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        .evidence-box {
+            background: #f6faf6;
+            border-radius: 10px;
+            padding: 10px;
+        }
+
+        .evidence-number {
+            font-size: 20px;
+            font-weight: bold;
+            color: #237a35;
+        }
+
+        .evidence-label {
+            font-size: 11px;
+            color: #69776d;
+            margin-top: 3px;
+        }
+
+        .explain {
+            background: #f6faf6;
+            border-radius: 12px;
+            padding: 13px;
+            margin-top: 12px;
+            color: #56635a;
+            font-size: 13px;
+        }
+
+        .actions {
+            margin-top: 13px;
+            background: #f8fbf8;
+            border-radius: 12px;
+            padding: 13px 16px;
+        }
+
+        .actions ul {
+            margin: 8px 0 0 20px;
+            padding: 0;
+        }
+
+        .actions li {
+            margin: 6px 0;
+        }
+
+        #map {
+            height: 560px;
+            border-radius: 16px;
+            overflow: hidden;
+            border: 1px solid #d9e2db;
+        }
+
+        .legend-box {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+            margin-top: 12px;
+            font-size: 13px;
+            color: #69776d;
+        }
+
+        .legend-dot {
+            width: 11px;
+            height: 11px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 5px;
+        }
+
+        .red {
+            background: #d9534f;
+        }
+
+        .orange {
+            background: #f0ad4e;
+        }
+
+        .green {
+            background: #5a9b62;
+        }
+
+        .blue {
+            background: #1769aa;
+        }
+
+        .gray {
+            background: #8b9590;
+        }
+
+        .report-row {
+            display: grid;
+            grid-template-columns: 1.25fr 0.65fr 0.75fr 1.1fr 1fr;
+            gap: 10px;
+            padding: 13px 0;
+            border-bottom: 1px solid #e2e8e3;
+            align-items: center;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: bold;
+        }
+
+        .status.corroborating {
+            background: #e4f5e7;
+            color: #277333;
+        }
+
+        .status.supporting {
+            background: #eef1f5;
+            color: #52606a;
+        }
+
+        .status.unconfirmed {
+            background: #fff0d6;
+            color: #8a5b00;
+        }
+
+        .status.duplicate {
+            background: #f0f0f0;
+            color: #6c7370;
+        }
+
+        .heat-controls {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-top: 12px;
+            padding-top: 10px;
+            border-top: 1px solid #e2e8e3;
+        }
+
+        .heat-controls button {
+            background: #1769aa;
+        }
+
+        .heat-controls button.off {
+            background: #69776d;
+        }
+
+        .trend-bars {
+            display: flex;
+            align-items: flex-end;
+            gap: 10px;
+            height: 180px;
+            padding: 18px 8px 4px;
+            border-bottom: 1px solid #dfe7e1;
+        }
+
+        .trend-col {
+            flex: 1;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            align-items: center;
+            min-width: 36px;
+        }
+
+        .trend-bar {
+            width: min(42px, 80%);
+            min-height: 5px;
+            border-radius: 7px 7px 0 0;
+            background: #2d7d35;
+        }
+
+        .trend-count {
+            font-size: 12px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .trend-date {
+            font-size: 10px;
+            color: #69776d;
+            margin-top: 7px;
+            white-space: nowrap;
+        }
+
+        .buttons {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin: 20px 0;
+        }
+
+        .buttons button {
+            background: #2d7d35;
+        }
+
+        .note {
+            background: #fffbe8;
+            border: 1px solid #f0df9a;
+            border-radius: 12px;
+            padding: 12px;
+            font-size: 13px;
+            color: #685b2d;
+            margin-top: 12px;
+        }
+
+        @media (max-width: 800px) {
+            .stats {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .evidence {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .report-row {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (max-width: 600px) {
+            #map {
+                height: 430px;
+            }
+
+            .stats {
+                grid-template-columns: 1fr;
+            }
+
+            .evidence {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .report-row {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .demo-actions {
+                width: 100%;
+            }
+
+            .demo-card button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="page">
+
+        <!-- =====================================================
+             HEADER
+        ====================================================== -->
+
+        <div class="header">
+
+            <h1>
+                {{ map_ui.title }}
+            </h1>
+
+            <p class="subtitle">
+                {{ map_ui.subtitle }}
+            </p>
+
+        </div>
+
+
+        <!-- =====================================================
+             STATISTICS
+        ====================================================== -->
+
+        <div class="stats">
+
+            <div class="stat">
+
+                <div class="stat-number">
+                    {{ total_reports }}
+                </div>
+
+                <div class="stat-label">
+                    📷 {{ map_ui.stats_reports }}
+                </div>
+
+            </div>
+
+
+            <div class="stat">
+
+                <div class="stat-number">
+                    {{ active_alerts }}
+                </div>
+
+                <div class="stat-label">
+                    🚨 {{ map_ui.stats_alerts }}
+                </div>
+
+            </div>
+
+
+            <div class="stat">
+
+                <div class="stat-label">
+                    🦠 {{ map_ui.stats_disease }}
+                </div>
+
+                <div class="stat-value">
+                    {{ most_reported_disease }}
+                </div>
+
+            </div>
+
+
+            <div class="stat">
+
+                <div class="stat-label">
+                    🌱 {{ map_ui.stats_crop }}
+                </div>
+
+                <div class="stat-value">
+                    {{ highest_risk_crop }}
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =====================================================
+             EVIDENCE DEMO
+        ====================================================== -->
+
+        <div class="demo-card">
+
+            <div class="demo-actions">
+
+                <button
+                    id="genuineBtn"
+                    type="button"
+                >
+                    🌱 Genuine Outbreak
+                </button>
+
+
+                <button
+                    id="panicBtn"
+                    type="button"
+                >
+                    📢 Panic Reporting
+                </button>
+
+            </div>
+
+
+            <div
+                id="demoMsg"
+                class="small"
+            ></div>
+
+        </div>
+
+
+        <!-- =====================================================
+             ALERTS
+        ====================================================== -->
+
+        <div class="card alert-box">
+
+            <h2>
+                🚨 {{ map_ui.alerts }}
+            </h2>
+
+
+            {% if clusters %}
+
+                {% for cluster in clusters %}
+
+                    <div class="alert-item {{ cluster.severity_level }}">
+
+                        <span class="badge {{ cluster.severity_level }}">
+                            {{ cluster.severity }}
+                        </span>
+
+                        <br>
+
+                        <strong>
+                            🦠 {{ cluster.crop }} — {{ cluster.disease }}
+                        </strong>
+
+
+                        <div
+                            class="small"
+                            style="margin-top: 7px;"
+                        >
+                            {{ cluster.submitted_count }}
+                            submitted •
+
+                            {{ cluster.corroborating_count }}
+                            {{ map_ui.corroborating }} •
+
+                            {{ cluster.independent_locations }}
+                            {{ map_ui.locations }} •
+
+                            {{ cluster.duplicate_count }}
+                            {{ map_ui.duplicates }}
+                        </div>
+
+
+                        <div class="evidence">
+
+                            <div class="evidence-box">
+
+                                <div class="evidence-number">
+                                    {{ cluster.evidence_score }}
+                                </div>
+
+                                <div class="evidence-label">
+                                    {{ map_ui.evidence }}
+                                </div>
+
+                            </div>
+
+
+                            <div class="evidence-box">
+
+                                <div class="evidence-number">
+                                    {{ cluster.corroborating_count }}
+                                </div>
+
+                                <div class="evidence-label">
+                                    {{ map_ui.corroborating }}
+                                </div>
+
+                            </div>
+
+
+                            <div class="evidence-box">
+
+                                <div class="evidence-number">
+                                    {{ cluster.independent_locations }}
+                                </div>
+
+                                <div class="evidence-label">
+                                    {{ map_ui.locations }}
+                                </div>
+
+                            </div>
+
+
+                            <div class="evidence-box">
+
+                                <div class="evidence-number">
+                                    {{ cluster.confidence }}%
+                                </div>
+
+                                <div class="evidence-label">
+                                    {{ map_ui.confidence }}
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="explain">
+
+                            📍 Cluster center:
+
+                            {{ "%.4f"|format(cluster.latitude) }},
+                            {{ "%.4f"|format(cluster.longitude) }}
+
+                            <br>
+
+                            {{ map_ui.logic }}
+
+                        </div>
+
+
+                        <div class="actions">
+
+                            <strong>
+                                🌾 {{ map_ui.recommendations }}
+                            </strong>
+
+                            <ul>
+
+                                {% for action in cluster.recommendations %}
+
+                                    <li>
+                                        {{ action }}
+                                    </li>
+
+                                {% endfor %}
+
+                            </ul>
+
+                        </div>
+
+                    </div>
+
+                {% endfor %}
+
+            {% else %}
+
+                <div class="explain">
+                    {{ map_ui.no_alerts }}
+                </div>
+
+            {% endif %}
+
+        </div>
+
+
+        <!-- =====================================================
+             TREND
+        ====================================================== -->
+
+        <div class="card">
+
+            <h2>
+                {{ map_ui.trend_title }}
+            </h2>
+
+
+            {% if trend %}
+
+                <div
+                    class="trend-bars"
+                    id="trendBars"
+                ></div>
+
+            {% else %}
+
+                <p class="small">
+                    {{ map_ui.trend_empty }}
+                </p>
+
+            {% endif %}
+
+        </div>
+
+
+        <!-- =====================================================
+             MAP
+        ====================================================== -->
+
+        <div class="card">
+
+            <h2>
+                🗺️ {{ map_ui.reports }}
+            </h2>
+
+
+            <div id="map"></div>
+
+
+            <div class="legend-box">
+
+                <span>
+                    <span class="legend-dot red"></span>
+                    High Risk
+                </span>
+
+                <span>
+                    <span class="legend-dot orange"></span>
+                    Moderate Risk
+                </span>
+
+                <span>
+                    <span class="legend-dot green"></span>
+                    Watch Area
+                </span>
+
+                <span>
+                    <span class="legend-dot blue"></span>
+                    Corroborating
+                </span>
+
+                <span>
+                    <span class="legend-dot gray"></span>
+                    Supporting/copycat
+                </span>
+
+            </div>
+
+
+            <p class="small">
+                {{ map_ui.legend }}
+            </p>
+
+
+            <p class="small">
+                🔒 {{ map_ui.privacy }}
+            </p>
+
+
+            <div class="heat-controls">
+
+                <button
+                    type="button"
+                    id="heatToggle"
+                >
+                    🔥 Show Evidence Heatmap
+                </button>
+
+
+                <span
+                    id="heatStatus"
+                    class="small"
+                >
+                    Heatmap is off
+                </span>
+
+            </div>
+
+
+            <div class="note">
+
+                💡
+
+                <strong>
+                    More reports ≠ more evidence.
+                </strong>
+
+                Reports from the same small area are down-weighted;
+                geographically distinct, photo-confirmed reports
+                contribute more strongly.
+
+            </div>
+
+        </div>
+
+
+        <!-- =====================================================
+             REPORTS
+        ====================================================== -->
+
+        <div class="card">
+
+            <h2>
+                📷 {{ map_ui.reports }}
+            </h2>
+
+
+            {% if reports %}
+
+                {% for report in reports[:30] %}
+
+                    <div class="report-row">
+
+                        <div>
+
+                            <strong>
+                                {{ report.crop }}
+                            </strong>
+
+                            <br>
+
+                            <span class="small">
+                                {{ report.disease }}
+                            </span>
+
+                        </div>
+
+
+                        <div>
+                            {{ report.confidence }}%
+                        </div>
+
+
+                        <div>
+
+                            <span
+                                class="status {{ report.evidence_status or 'unconfirmed' }}"
+                            >
+                                {{ report.evidence_status or 'unconfirmed' }}
+                            </span>
+
+                        </div>
+
+
+                        <div>
+                            {{ report.created_at }}
+                        </div>
+
+
+                        <div class="small">
+
+                            {{ "%.4f"|format(report.latitude) }},
+                            {{ "%.4f"|format(report.longitude) }}
+
+                        </div>
+
+                    </div>
+
+                {% endfor %}
+
+            {% else %}
+
+                <p class="small">
+                    {{ map_ui.empty }}
+                </p>
+
+            {% endif %}
+
+        </div>
+
+
+        <!-- =====================================================
+             BOTTOM BUTTONS
+        ====================================================== -->
+
+        <div class="buttons">
+
+            <a href="/?lang={{ language }}">
+
+                <button type="button">
+                    {{ map_ui.back }}
+                </button>
+
+            </a>
+
+
+            <a href="/history?lang={{ language }}">
+
+                <button type="button">
+                    {{ map_ui.history }}
+                </button>
+
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         LEAFLET
+    ====================================================== -->
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+    <script src="https://unpkg.com/leaflet.heat/dist/leaflet-heat.js"></script>
+
+
+    <!-- =====================================================
+         MAP DATA
+    ====================================================== -->
+
+    <script
+        type="application/json"
+        id="map-data"
+    >
+        {{ {
+            'reports': reports,
+            'clusters': clusters,
+            'trend': trend
+        } | tojson }}
+    </script>
+
+
+    <script>
+
+        /* =====================================================
+           LOAD DATA
+        ===================================================== */
+
+        const dataElement =
+            document.getElementById("map-data");
+
+        const mapData =
+            dataElement
+                ? JSON.parse(dataElement.textContent)
+                : {
+                    reports: [],
+                    clusters: [],
+                    trend: []
+                };
+
+
+        const reports =
+            mapData.reports || [];
+
+        const clusters =
+            mapData.clusters || [];
+
+        const trend =
+            mapData.trend || [];
+
+
+        /* =====================================================
+           TREND CHART
+        ===================================================== */
+
+        const trendBars =
+            document.getElementById("trendBars");
+
+
+        if (
+            trendBars &&
+            trend.length
+        ) {
+
+            const maxCount =
+                Math.max(
+                    ...trend.map(
+                        item => item.count
+                    ),
+                    1
+                );
+
+
+            trend
+                .slice(-14)
+                .forEach(item => {
+
+                    const col =
+                        document.createElement("div");
+
+                    col.className =
+                        "trend-col";
+
+
+                    const count =
+                        document.createElement("div");
+
+                    count.className =
+                        "trend-count";
+
+                    count.textContent =
+                        item.count;
+
+
+                    const bar =
+                        document.createElement("div");
+
+                    bar.className =
+                        "trend-bar";
+
+                    bar.style.height =
+                        Math.max(
+                            5,
+                            (item.count / maxCount) * 125
+                        ) + "px";
+
+
+                    const date =
+                        document.createElement("div");
+
+                    date.className =
+                        "trend-date";
+
+                    date.textContent =
+                        item.date.slice(5);
+
+
+                    col.append(
+                        count,
+                        bar,
+                        date
+                    );
+
+
+                    trendBars.appendChild(col);
+
+                });
+
+        }
+
+
+        /* =====================================================
+           INITIALIZE MAP
+        ===================================================== */
+
+        const map =
+            L.map("map").setView(
+                [20.5937, 78.9629],
+                5
+            );
+
+
+        L.tileLayer(
+            "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+            {
+                maxZoom: 19,
+                attribution:
+                    "&copy; OpenStreetMap contributors"
+            }
+        ).addTo(map);
+
+
+        /* =====================================================
+           COLORS
+        ===================================================== */
+
+        function severityColor(level) {
+
+            if (level === "high") {
+                return "#d9534f";
+            }
+
+            if (level === "moderate") {
+                return "#f0ad4e";
+            }
+
+            return "#5a9b62";
+        }
+
+
+        function statusColor(status) {
+
+            if (status === "corroborating") {
+                return "#1769aa";
+            }
+
+            if (status === "supporting") {
+                return "#8b9590";
+            }
+
+            return "#b99a43";
+        }
+
+
+        /* =====================================================
+           EVIDENCE WEIGHT
+        ===================================================== */
+
+        function evidenceWeight(report) {
+
+            const confidence =
+                Math.max(
+                    0,
+                    Math.min(
+                        1,
+                        Number(report.confidence || 0) / 100
+                    )
+                );
+
+
+            if (
+                report.evidence_status ===
+                "corroborating"
+            ) {
+
+                return Math.max(
+                    0.7,
+                    confidence
+                );
+
+            }
+
+
+            if (
+                report.evidence_status ===
+                "supporting"
+            ) {
+
+                return Math.max(
+                    0.12,
+                    confidence * 0.2
+                );
+
+            }
+
+
+            return 0.08;
+        }
+
+
+        /* =====================================================
+           REPORT MARKERS
+        ===================================================== */
+
+        if (reports.length) {
+
+            const bounds = [];
+
+
+            reports.forEach(report => {
+
+                const point = [
+                    Number(report.latitude),
+                    Number(report.longitude)
+                ];
+
+
+                bounds.push(point);
+
+
+                const color =
+                    statusColor(
+                        report.evidence_status
+                    );
+
+
+                L.circleMarker(
+                    point,
+                    {
+                        radius:
+                            report.evidence_status ===
+                            "corroborating"
+                                ? 8
+                                : 6,
+
+                        color: color,
+
+                        weight: 2,
+
+                        fillColor: color,
+
+                        fillOpacity: 0.78
+                    }
+                )
+                    .addTo(map)
+                    .bindPopup(
+                        "<strong>" +
+                        report.crop +
+                        "</strong><br>" +
+
+                        report.disease +
+                        "<br>" +
+
+                        "AI confidence: " +
+                        report.confidence +
+                        "%" +
+                        "<br>" +
+
+                        "Evidence: " +
+                        (
+                            report.evidence_status ||
+                            "unconfirmed"
+                        ) +
+                        "<br>" +
+
+                        report.created_at
+                    );
+
+            });
+
+
+            map.fitBounds(
+                bounds,
+                {
+                    padding: [30, 30]
+                }
+            );
+
+        }
+
+
+        /* =====================================================
+           HEATMAP
+        ===================================================== */
+
+        let heatLayer = null;
+
+
+        if (
+            typeof L.heatLayer === "function" &&
+            reports.length
+        ) {
+
+            const heatPoints =
+                reports.map(
+                    report => [
+                        Number(report.latitude),
+                        Number(report.longitude),
+                        evidenceWeight(report)
+                    ]
+                );
+
+
+            heatLayer =
+                L.heatLayer(
+                    heatPoints,
+                    {
+                        radius: 35,
+                        blur: 28,
+                        maxZoom: 15,
+                        max: 1,
+                        minOpacity: 0.28
+                    }
+                );
+
+        }
+
+
+        /* =====================================================
+           CLUSTER CIRCLES
+        ===================================================== */
+
+        clusters.forEach(cluster => {
+
+            const color =
+                severityColor(
+                    cluster.severity_level
+                );
+
+
+            L.circle(
+                [
+                    cluster.latitude,
+                    cluster.longitude
+                ],
+                {
+                    radius: 3000,
+
+                    color: color,
+
+                    weight: 3,
+
+                    fillColor: color,
+
+                    fillOpacity: 0.14
+                }
+            )
+                .addTo(map)
+                .bindPopup(
+                    "<strong>🚨 " +
+                    cluster.severity +
+                    "</strong><br>" +
+
+                    cluster.crop +
+                    "<br>" +
+
+                    cluster.disease +
+                    "<br>" +
+
+                    cluster.submitted_count +
+                    " submitted reports" +
+                    "<br>" +
+
+                    cluster.corroborating_count +
+                    " corroborating reports" +
+                    "<br>" +
+
+                    cluster.independent_locations +
+                    " independent locations" +
+                    "<br>" +
+
+                    "Evidence score: " +
+                    cluster.evidence_score
+                );
+
+        });
+
+
+        /* =====================================================
+           HEATMAP TOGGLE
+        ===================================================== */
+
+        const heatToggle =
+            document.getElementById(
+                "heatToggle"
+            );
+
+
+        const heatStatus =
+            document.getElementById(
+                "heatStatus"
+            );
+
+
+        if (heatToggle) {
+
+            heatToggle.addEventListener(
+                "click",
+                function () {
+
+                    if (!heatLayer) {
+
+                        heatStatus.textContent =
+                            "No reports available for heatmap.";
+
+                        return;
+                    }
+
+
+                    if (
+                        map.hasLayer(
+                            heatLayer
+                        )
+                    ) {
+
+                        map.removeLayer(
+                            heatLayer
+                        );
+
+
+                        heatToggle.textContent =
+                            "🔥 Show Evidence Heatmap";
+
+
+                        heatToggle.classList.add(
+                            "off"
+                        );
+
+
+                        heatStatus.textContent =
+                            "Heatmap is off";
+
+                    } else {
+
+                        heatLayer.addTo(map);
+
+
+                        heatToggle.textContent =
+                            "📍 Hide Evidence Heatmap";
+
+
+                        heatToggle.classList.remove(
+                            "off"
+                        );
+
+
+                        heatStatus.textContent =
+                            "Heatmap intensity uses evidence weight, not raw report count.";
+
+                    }
+
+                }
+            );
+
+        }
+
+
+        /* =====================================================
+           CX0603 DEMO
+        ===================================================== */
+
+        async function runDemo(
+            url,
+            button
+        ) {
+
+            button.disabled = true;
+
+
+            const oldText =
+                button.textContent;
+
+
+            button.textContent =
+                "Adding demo...";
+
+
+            try {
+
+                const response =
+                    await fetch(
+                        url,
+                        {
+                            method: "POST",
+
+                            headers: {
+                                "Accept":
+                                    "application/json"
+                            }
+                        }
+                    );
+
+
+                const data =
+                    await response.json();
+
+
+                if (
+                    !response.ok ||
+                    !data.ok
+                ) {
+
+                    throw new Error(
+                        data.message ||
+                        "Demo failed"
+                    );
+
+                }
+
+
+                document
+                    .getElementById("demoMsg")
+                    .textContent =
+                        data.message ||
+                        "Demo added.";
+
+
+                setTimeout(
+                    () => {
+                        window.location.reload();
+                    },
+                    350
+                );
+
+            } catch (error) {
+
+                document
+                    .getElementById("demoMsg")
+                    .textContent =
+                        "Error: " +
+                        error.message;
+
+
+                button.disabled =
+                    false;
+
+
+                button.textContent =
+                    oldText;
+
+            }
+
+        }
+
+
+        /* =====================================================
+           GENUINE OUTBREAK BUTTON
+        ===================================================== */
+
+        const genuineButton =
+            document.getElementById(
+                "genuineBtn"
+            );
+
+
+        if (genuineButton) {
+
+            genuineButton.addEventListener(
+                "click",
+                function () {
+
+                    runDemo(
+                        "/demo-outbreak",
+                        genuineButton
+                    );
+
+                }
+            );
+
+        }
+
+
+        /* =====================================================
+           PANIC REPORTING BUTTON
+        ===================================================== */
+
+        const panicButton =
+            document.getElementById(
+                "panicBtn"
+            );
+
+
+        if (panicButton) {
+
+            panicButton.addEventListener(
+                "click",
+                function () {
+
+                    runDemo(
+                        "/demo-panic",
+                        panicButton
+                    );
+
+                }
+            );
+
+        }
+
+    </script>
+
+</body>
+
+</html>

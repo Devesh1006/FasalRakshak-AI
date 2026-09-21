@@ -1,0 +1,1723 @@
+<!DOCTYPE html>
+<html lang="{{ language or 'en' }}">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        {{ history_ui.title }} | FasalRakshak AI
+    </title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='style.css') }}"
+    >
+
+    <style>
+        /* =====================================================
+           FASALRAKSHAK AI - HISTORY DASHBOARD
+        ===================================================== */
+
+        :root {
+            --green: #16833a;
+            --dark-green: #0d5427;
+            --light-green: #eaf7ed;
+            --soft-green: #f5fbf5;
+            --cream: #fbfaf3;
+            --text: #173c27;
+            --muted: #68776e;
+            --border: #dce9df;
+            --red: #c9433d;
+            --blue: #2877b9;
+            --shadow: 0 12px 35px rgba(21, 79, 40, 0.10);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+
+            font-family:
+                Inter,
+                "Segoe UI",
+                Arial,
+                sans-serif;
+
+            color: var(--text);
+
+            background:
+                radial-gradient(
+                    circle at top left,
+                    #eff9ef 0,
+                    transparent 30%
+                ),
+                linear-gradient(
+                    135deg,
+                    #f8fbf7,
+                    #eef7ef
+                );
+        }
+
+        button {
+            font-family: inherit;
+        }
+
+        a {
+            color: inherit;
+        }
+
+        /* =====================================================
+           NAVBAR
+        ===================================================== */
+
+        .top-nav {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+
+            min-height: 76px;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            padding: 10px 5%;
+
+            background: rgba(255, 253, 246, 0.96);
+
+            border-bottom: 1px solid #e1e7df;
+
+            backdrop-filter: blur(14px);
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 11px;
+
+            text-decoration: none;
+        }
+
+        .brand-mark {
+            width: 48px;
+            height: 48px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 15px;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    #dff4df,
+                    #f6fff4
+                );
+
+            font-size: 31px;
+        }
+
+        .brand-name {
+            color: var(--dark-green);
+
+            font-size: 21px;
+            font-weight: 850;
+        }
+
+        .brand-tagline {
+            margin-top: 3px;
+
+            color: #4b963f;
+
+            font-size: 10px;
+            font-weight: 800;
+
+            letter-spacing: 1px;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .nav-links a {
+            padding: 10px 14px;
+
+            border-radius: 11px;
+
+            color: #32483a;
+
+            text-decoration: none;
+
+            font-size: 13px;
+            font-weight: 650;
+
+            transition: 0.2s;
+        }
+
+        .nav-links a:hover {
+            background: var(--light-green);
+            color: var(--green);
+        }
+
+        .nav-links .active {
+            color: white;
+            background: var(--green);
+        }
+
+        /* =====================================================
+           MAIN
+        ===================================================== */
+
+        .page {
+            width: min(1120px, 92%);
+            margin: 36px auto 60px;
+        }
+
+        .page-header {
+            position: relative;
+
+            overflow: hidden;
+
+            padding: 38px 30px;
+
+            margin-bottom: 22px;
+
+            text-align: center;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #eaf8ed,
+                    #ffffff
+                );
+
+            border: 1px solid #cfe7d4;
+
+            border-radius: 25px;
+
+            box-shadow: var(--shadow);
+        }
+
+        .page-header::after {
+            content: "";
+
+            position: absolute;
+
+            width: 190px;
+            height: 190px;
+
+            right: -75px;
+            top: -75px;
+
+            border-radius: 50%;
+
+            background: rgba(55, 158, 72, 0.08);
+        }
+
+        .eyebrow {
+            position: relative;
+            z-index: 1;
+
+            display: inline-block;
+
+            padding: 7px 14px;
+
+            border-radius: 30px;
+
+            background: #dff2e3;
+
+            color: var(--green);
+
+            font-size: 11px;
+            font-weight: 800;
+
+            letter-spacing: 0.6px;
+        }
+
+        .page-header h1 {
+            position: relative;
+            z-index: 1;
+
+            margin: 13px 0 7px;
+
+            color: var(--dark-green);
+
+            font-size: clamp(28px, 4vw, 40px);
+        }
+
+        .page-header p {
+            position: relative;
+            z-index: 1;
+
+            margin: 0 auto;
+
+            max-width: 650px;
+
+            color: var(--muted);
+
+            font-size: 15px;
+
+            line-height: 1.6;
+        }
+
+        /* =====================================================
+           STATISTICS
+        ===================================================== */
+
+        .stats {
+            display: grid;
+
+            grid-template-columns:
+                repeat(4, 1fr);
+
+            gap: 14px;
+
+            margin-bottom: 22px;
+        }
+
+        .stat-card {
+            padding: 21px;
+
+            background: white;
+
+            border: 1px solid var(--border);
+
+            border-radius: 19px;
+
+            box-shadow: var(--shadow);
+
+            transition: 0.2s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-3px);
+        }
+
+        .stat-icon {
+            width: 40px;
+            height: 40px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            margin-bottom: 12px;
+
+            border-radius: 12px;
+
+            background: var(--light-green);
+
+            font-size: 19px;
+        }
+
+        .stat-label {
+            color: var(--muted);
+
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .stat-number {
+            margin-top: 5px;
+
+            color: var(--dark-green);
+
+            font-size: 29px;
+            font-weight: 850;
+        }
+
+        /* =====================================================
+           CARDS
+        ===================================================== */
+
+        .card {
+            margin-bottom: 22px;
+
+            padding: 25px;
+
+            background: white;
+
+            border: 1px solid var(--border);
+
+            border-radius: 21px;
+
+            box-shadow: var(--shadow);
+        }
+
+        .card-title {
+            margin: 0;
+
+            color: var(--dark-green);
+
+            font-size: 21px;
+        }
+
+        .card-subtitle {
+            margin: 7px 0 20px;
+
+            color: var(--muted);
+
+            font-size: 13px;
+        }
+
+        /* =====================================================
+           HEALTH TREND
+        ===================================================== */
+
+        .chart-card {
+            overflow: hidden;
+        }
+
+        .chart-container {
+            position: relative;
+
+            width: 100%;
+            height: 330px;
+
+            border-radius: 15px;
+
+            background:
+                linear-gradient(
+                    180deg,
+                    #fbfdfb,
+                    #f5faf5
+                );
+
+            border: 1px solid #edf2ed;
+        }
+
+        #healthChart {
+            width: 100%;
+            height: 100%;
+        }
+
+        .no-chart {
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+
+            height: 240px;
+
+            color: var(--muted);
+
+            text-align: center;
+        }
+
+        /* =====================================================
+           TABLE
+        ===================================================== */
+
+        .table-wrapper {
+            width: 100%;
+
+            overflow-x: auto;
+
+            border-radius: 15px;
+
+            border: 1px solid #e2ebe3;
+        }
+
+        table {
+            width: 100%;
+
+            min-width: 720px;
+
+            border-collapse: collapse;
+        }
+
+        thead {
+            background: var(--dark-green);
+        }
+
+        th {
+            padding: 14px 15px;
+
+            color: white;
+
+            text-align: left;
+
+            font-size: 12px;
+
+            white-space: nowrap;
+        }
+
+        td {
+            padding: 14px 15px;
+
+            border-bottom: 1px solid #edf2ed;
+
+            color: #43554a;
+
+            font-size: 13px;
+        }
+
+        tbody tr:hover {
+            background: #f7fbf7;
+        }
+
+        tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .healthy {
+            display: inline-block;
+
+            padding: 6px 9px;
+
+            border-radius: 20px;
+
+            background: #e8f7eb;
+
+            color: #20783a;
+
+            font-weight: 750;
+        }
+
+        .disease {
+            display: inline-block;
+
+            padding: 6px 9px;
+
+            border-radius: 20px;
+
+            background: #fff0ee;
+
+            color: #b33c36;
+
+            font-weight: 750;
+        }
+
+        .confidence {
+            font-weight: 750;
+
+            color: var(--green);
+        }
+
+        .score {
+            font-weight: 800;
+
+            color: var(--dark-green);
+        }
+
+        .uncertain {
+            color: #a06b16;
+
+            font-weight: 700;
+        }
+
+        /* =====================================================
+           EMPTY STATE
+        ===================================================== */
+
+        .empty {
+            padding: 55px 20px;
+
+            text-align: center;
+        }
+
+        .empty-icon {
+            width: 75px;
+            height: 75px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            margin: 0 auto 15px;
+
+            border-radius: 25px;
+
+            background: var(--light-green);
+
+            font-size: 36px;
+        }
+
+        .empty h3 {
+            margin: 0 0 8px;
+
+            color: var(--dark-green);
+        }
+
+        .empty p {
+            max-width: 500px;
+
+            margin: 0 auto;
+
+            color: var(--muted);
+
+            font-size: 13px;
+
+            line-height: 1.6;
+        }
+
+        /* =====================================================
+           INSIGHT
+        ===================================================== */
+
+        .insight {
+            display: flex;
+            align-items: flex-start;
+
+            gap: 13px;
+
+            margin-bottom: 22px;
+
+            padding: 18px 20px;
+
+            border-radius: 17px;
+
+            background: #f1f8ff;
+
+            border: 1px solid #d5e7f5;
+        }
+
+        .insight-icon {
+            font-size: 24px;
+        }
+
+        .insight strong {
+            display: block;
+
+            margin-bottom: 4px;
+
+            color: #1769a8;
+        }
+
+        .insight span {
+            color: #597080;
+
+            font-size: 13px;
+
+            line-height: 1.5;
+        }
+
+        /* =====================================================
+           ACTIONS
+        ===================================================== */
+
+        .actions {
+            display: flex;
+
+            justify-content: center;
+
+            flex-wrap: wrap;
+
+            gap: 10px;
+
+            margin-top: 25px;
+        }
+
+        .action-button {
+            border: none;
+
+            padding: 13px 20px;
+
+            border-radius: 12px;
+
+            cursor: pointer;
+
+            font-size: 13px;
+            font-weight: 750;
+
+            transition: 0.2s;
+        }
+
+        .action-button:hover {
+            transform: translateY(-2px);
+        }
+
+        .primary {
+            color: white;
+
+            background: var(--green);
+        }
+
+        .secondary {
+            color: #1769a8;
+
+            background: #eaf4fb;
+
+            border: 1px solid #d2e4f0;
+        }
+
+        .danger {
+            color: white;
+
+            background: var(--red);
+        }
+
+        /* =====================================================
+           FOOTER
+        ===================================================== */
+
+        .footer {
+            margin-top: 38px;
+
+            text-align: center;
+
+            color: #748178;
+
+            font-size: 12px;
+
+            line-height: 1.7;
+        }
+
+        /* =====================================================
+           RESPONSIVE
+        ===================================================== */
+
+        @media (max-width: 850px) {
+
+            .stats {
+                grid-template-columns:
+                    repeat(2, 1fr);
+            }
+
+            .nav-links a:nth-child(4),
+            .nav-links a:nth-child(5) {
+                display: none;
+            }
+        }
+
+        @media (max-width: 600px) {
+
+            .top-nav {
+                padding: 10px 4%;
+            }
+
+            .brand-name {
+                font-size: 17px;
+            }
+
+            .brand-tagline {
+                font-size: 8px;
+            }
+
+            .brand-mark {
+                width: 40px;
+                height: 40px;
+
+                font-size: 26px;
+            }
+
+            .nav-links a {
+                padding: 8px;
+
+                font-size: 10px;
+            }
+
+            .page {
+                width: 94%;
+
+                margin-top: 24px;
+            }
+
+            .page-header {
+                padding: 30px 18px;
+            }
+
+            .stats {
+                gap: 9px;
+            }
+
+            .stat-card {
+                padding: 16px 12px;
+            }
+
+            .stat-number {
+                font-size: 24px;
+            }
+
+            .card {
+                padding: 18px;
+            }
+
+            .chart-container {
+                height: 270px;
+            }
+
+            .actions {
+                flex-direction: column;
+            }
+
+            .actions a,
+            .actions form,
+            .action-button {
+                width: 100%;
+            }
+
+            .action-button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+
+<body>
+
+    <!-- =====================================================
+         NAVIGATION
+    ===================================================== -->
+
+    <header class="top-nav">
+
+        <a
+            class="brand"
+            href="/?lang={{ language or 'en' }}"
+        >
+
+            <div class="brand-mark">
+                🌿
+            </div>
+
+            <div>
+
+                <div class="brand-name">
+                    FasalRakshak AI
+                </div>
+
+                <div class="brand-tagline">
+                    CROP HEALTH AI
+                </div>
+
+            </div>
+
+        </a>
+
+
+        <nav class="nav-links">
+
+            <a href="/?lang={{ language or 'en' }}">
+                🏠 Home
+            </a>
+
+            <a href="/?lang={{ language or 'en' }}">
+                📷 Scan
+            </a>
+
+            <a class="active" href="/history?lang={{ language or 'en' }}">
+                📊 History
+            </a>
+
+            <a href="/outbreak-map?lang={{ language or 'en' }}">
+                📍 Map
+            </a>
+
+        </nav>
+
+    </header>
+
+
+    <main class="page">
+
+        <!-- =================================================
+             HEADER
+        ================================================== -->
+
+        <section class="page-header">
+
+            <span class="eyebrow">
+
+                {% if language == "hi" %}
+                    🌱 फसल निगरानी
+                {% elif language == "mr" %}
+                    🌱 पीक निरीक्षण
+                {% else %}
+                    🌱 CROP MONITORING
+                {% endif %}
+
+            </span>
+
+
+            <h1>
+                {{ history_ui.title }}
+            </h1>
+
+
+            <p>
+
+                {% if language == "hi" %}
+
+                    अपनी फसलों के पिछले AI विश्लेषण और
+                    स्वास्थ्य स्कोर को ट्रैक करें।
+
+                {% elif language == "mr" %}
+
+                    तुमच्या पिकांचे मागील AI विश्लेषण आणि
+                    आरोग्य स्कोअर ट्रॅक करा.
+
+                {% else %}
+
+                    Track your previous AI crop analyses
+                    and monitor changes in crop health.
+
+                {% endif %}
+
+            </p>
+
+        </section>
+
+
+        <!-- =================================================
+             STATISTICS
+        ================================================== -->
+
+        <section class="stats">
+
+            <div class="stat-card">
+
+                <div class="stat-icon">
+                    📷
+                </div>
+
+                <div class="stat-label">
+                    {{ history_ui.total }}
+                </div>
+
+                <div class="stat-number">
+                    {{ total }}
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div class="stat-icon">
+                    💚
+                </div>
+
+                <div class="stat-label">
+                    {{ history_ui.average }}
+                </div>
+
+                <div class="stat-number">
+
+                    {% if average == "--" %}
+                        --
+                    {% else %}
+                        {{ average }}
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div class="stat-icon">
+                    🌿
+                </div>
+
+                <div class="stat-label">
+                    {{ history_ui.healthy }}
+                </div>
+
+                <div class="stat-number">
+                    {{ healthy_count }}
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div class="stat-icon">
+                    🦠
+                </div>
+
+                <div class="stat-label">
+                    {{ history_ui.disease }}
+                </div>
+
+                <div class="stat-number">
+                    {{ disease_count }}
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             INSIGHT
+        ================================================== -->
+
+        <section class="insight">
+
+            <div class="insight-icon">
+                💡
+            </div>
+
+            <div>
+
+                <strong>
+
+                    {% if language == "hi" %}
+                        FasalRakshak AI सुझाव
+                    {% elif language == "mr" %}
+                        FasalRakshak AI सूचना
+                    {% else %}
+                        FasalRakshak AI Insight
+                    {% endif %}
+
+                </strong>
+
+
+                <span>
+
+                    {% if language == "hi" %}
+
+                        नियमित रूप से अपनी फसल स्कैन करने से
+                        स्वास्थ्य में होने वाले बदलावों को समझने
+                        में मदद मिलती है।
+
+                    {% elif language == "mr" %}
+
+                        नियमितपणे पीक स्कॅन केल्याने पिकाच्या
+                        आरोग्यातील बदल समजण्यास मदत होते.
+
+                    {% else %}
+
+                        Scan the same crop regularly to monitor
+                        whether its health is improving or declining.
+
+                    {% endif %}
+
+                </span>
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             HEALTH TREND
+        ================================================== -->
+
+        {% if chart_data %}
+
+        <section class="card chart-card">
+
+            <h2 class="card-title">
+
+                📈
+
+                {% if language == "hi" %}
+                    स्वास्थ्य स्कोर ट्रेंड
+                {% elif language == "mr" %}
+                    आरोग्य स्कोअर ट्रेंड
+                {% else %}
+                    Health Score Trend
+                {% endif %}
+
+            </h2>
+
+
+            <p class="card-subtitle">
+
+                {% if language == "hi" %}
+
+                    पिछले स्कैन में आपकी फसल के स्वास्थ्य
+                    स्कोर में बदलाव।
+
+                {% elif language == "mr" %}
+
+                    मागील स्कॅनमधील तुमच्या पिकाच्या
+                    आरोग्य स्कोअरमधील बदल.
+
+                {% else %}
+
+                    Your crop health score across previous scans.
+
+                {% endif %}
+
+            </p>
+
+
+            <div class="chart-container">
+
+                <canvas id="healthChart"></canvas>
+
+            </div>
+
+        </section>
+
+        {% endif %}
+
+
+        <!-- =================================================
+             PREVIOUS SCANS
+        ================================================== -->
+
+        <section class="card">
+
+            <h2 class="card-title">
+                📋
+
+                {% if language == "hi" %}
+                    पिछले स्कैन
+                {% elif language == "mr" %}
+                    मागील स्कॅन
+                {% else %}
+                    Previous Scans
+                {% endif %}
+
+            </h2>
+
+
+            <p class="card-subtitle">
+
+                {% if language == "hi" %}
+                    आपके पिछले AI फसल विश्लेषण।
+                {% elif language == "mr" %}
+                    तुमच्या मागील AI पीक विश्लेषणाचे रेकॉर्ड.
+                {% else %}
+                    Your previous AI crop analysis records.
+                {% endif %}
+
+            </p>
+
+
+            {% if rows %}
+
+            <div class="table-wrapper">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                {{ history_ui.date }}
+                            </th>
+
+                            <th>
+                                {{ history_ui.crop }}
+                            </th>
+
+                            <th>
+                                {{ history_ui.disease_label }}
+                            </th>
+
+                            <th>
+                                {{ history_ui.confidence }}
+                            </th>
+
+                            <th>
+                                {{ history_ui.score }}
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        {% for row in rows %}
+
+                        <tr>
+
+                            <td>
+                                {{ row.created_at }}
+                            </td>
+
+
+                            <td>
+                                🌱 {{ row.crop }}
+                            </td>
+
+
+                            <td>
+
+                                {% if "healthy" in row.disease|lower %}
+
+                                    <span class="healthy">
+                                        🌿 {{ row.disease }}
+                                    </span>
+
+                                {% else %}
+
+                                    <span class="disease">
+                                        ⚠️ {{ row.disease }}
+                                    </span>
+
+                                {% endif %}
+
+                            </td>
+
+
+                            <td class="confidence">
+
+                                {{ row.confidence }}%
+
+                            </td>
+
+
+                            <td class="score">
+
+                                {% if row.health_score is none %}
+
+                                    <span class="uncertain">
+                                        {{ history_ui.uncertain }}
+                                    </span>
+
+                                {% else %}
+
+                                    {{ row.health_score }}/100
+
+                                {% endif %}
+
+                            </td>
+
+                        </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+
+            {% else %}
+
+            <div class="empty">
+
+                <div class="empty-icon">
+                    🌱
+                </div>
+
+
+                <h3>
+                    {{ history_ui.empty }}
+                </h3>
+
+
+                <p>
+
+                    {% if language == "hi" %}
+
+                        अपनी पहली फसल की फोटो अपलोड करके
+                        AI रोग पहचान शुरू करें।
+
+                    {% elif language == "mr" %}
+
+                        तुमच्या पहिल्या पिकाचा फोटो अपलोड करून
+                        AI रोग ओळख सुरू करा.
+
+                    {% else %}
+
+                        Upload your first crop image and perform
+                        an AI disease detection to create a
+                        monitoring record.
+
+                    {% endif %}
+
+                </p>
+
+            </div>
+
+            {% endif %}
+
+        </section>
+
+
+        <!-- =================================================
+             ACTION BUTTONS
+        ================================================== -->
+
+        <div class="actions">
+
+            <a
+                href="/?lang={{ language or 'en' }}"
+                style="text-decoration: none;"
+            >
+
+                <button
+                    class="action-button primary"
+                    type="button"
+                >
+
+                    {% if language == "hi" %}
+                        📷 दूसरी फसल जांचें
+                    {% elif language == "mr" %}
+                        📷 दुसरे पीक तपासा
+                    {% else %}
+                        📷 Scan Another Crop
+                    {% endif %}
+
+                </button>
+
+            </a>
+
+
+            <a
+                href="/outbreak-map?lang={{ language or 'en' }}"
+                style="text-decoration: none;"
+            >
+
+                <button
+                    class="action-button secondary"
+                    type="button"
+                >
+
+                    {% if language == "hi" %}
+                        🗺️ रोग चेतावनी मानचित्र
+                    {% elif language == "mr" %}
+                        🗺️ रोग इशारा नकाशा
+                    {% else %}
+                        🗺️ Disease Alert Map
+                    {% endif %}
+
+                </button>
+
+            </a>
+
+
+            {% if rows %}
+
+            <form
+                method="POST"
+                action="{{ url_for('clear_history') }}"
+                onsubmit="return confirm('Clear all monitoring history?');"
+                style="margin: 0;"
+            >
+
+                <input
+                    type="hidden"
+                    name="language"
+                    value="{{ language or 'en' }}"
+                >
+
+                <button
+                    class="action-button danger"
+                    type="submit"
+                >
+                    🗑️ Clear All Monitoring History
+                </button>
+
+            </form>
+
+            {% endif %}
+
+        </div>
+
+
+        <!-- =================================================
+             FOOTER
+        ================================================== -->
+
+        <footer class="footer">
+
+            🌿 <strong>FasalRakshak AI</strong>
+
+            <br>
+
+            {% if language == "hi" %}
+
+                बेहतर फसल स्वास्थ्य के लिए AI सहायता।
+
+            {% elif language == "mr" %}
+
+                निरोगी पिकांसाठी AI आधारित मदत.
+
+            {% else %}
+
+                AI-powered crop health monitoring for smarter farming.
+
+            {% endif %}
+
+        </footer>
+
+    </main>
+
+
+    <!-- =====================================================
+         HEALTH CHART
+    ===================================================== -->
+
+    <script type="application/json" id="chart-data">
+        {{ (chart_data or []) | tojson }}
+    </script>
+
+
+    <script>
+
+        const chartElement =
+            document.getElementById("chart-data");
+
+        const canvas =
+            document.getElementById("healthChart");
+
+
+        let chartData = [];
+
+
+        if (chartElement) {
+
+            try {
+
+                chartData =
+                    JSON.parse(
+                        chartElement.textContent || "[]"
+                    );
+
+            } catch (error) {
+
+                chartData = [];
+
+                console.error(
+                    "Could not read chart data:",
+                    error
+                );
+
+            }
+
+        }
+
+
+        if (
+            canvas &&
+            chartData.length > 0
+        ) {
+
+            const ctx =
+                canvas.getContext("2d");
+
+
+            const dpr =
+                window.devicePixelRatio || 1;
+
+
+            const rect =
+                canvas.getBoundingClientRect();
+
+
+            canvas.width =
+                rect.width * dpr;
+
+            canvas.height =
+                rect.height * dpr;
+
+
+            ctx.scale(dpr, dpr);
+
+
+            const width =
+                rect.width;
+
+            const height =
+                rect.height;
+
+
+            const left = 55;
+            const right = 25;
+            const top = 25;
+            const bottom = 55;
+
+
+            const chartWidth =
+                width - left - right;
+
+            const chartHeight =
+                height - top - bottom;
+
+
+            /* ---------------------------------------------
+               Background grid
+            --------------------------------------------- */
+
+            ctx.font =
+                "12px Arial";
+
+            ctx.textAlign =
+                "right";
+
+            ctx.textBaseline =
+                "middle";
+
+            ctx.strokeStyle =
+                "#dfe8e0";
+
+            ctx.fillStyle =
+                "#68776e";
+
+            ctx.lineWidth = 1;
+
+
+            for (
+                let value = 0;
+                value <= 100;
+                value += 20
+            ) {
+
+                const y =
+                    top +
+                    chartHeight -
+                    (value / 100) *
+                    chartHeight;
+
+
+                ctx.beginPath();
+
+                ctx.moveTo(
+                    left,
+                    y
+                );
+
+                ctx.lineTo(
+                    width - right,
+                    y
+                );
+
+                ctx.stroke();
+
+
+                ctx.fillText(
+                    value,
+                    left - 8,
+                    y
+                );
+
+            }
+
+
+            /* ---------------------------------------------
+               Convert data to points
+            --------------------------------------------- */
+
+            const points =
+                chartData.map(
+                    function (item, index) {
+
+                        const x =
+                            chartData.length === 1
+
+                                ? left +
+                                  chartWidth / 2
+
+                                : left +
+                                  (
+                                      index /
+                                      (
+                                          chartData.length - 1
+                                      )
+                                  ) *
+                                  chartWidth;
+
+
+                        const score =
+                            Math.max(
+                                0,
+                                Math.min(
+                                    100,
+                                    Number(
+                                        item.score
+                                    )
+                                )
+                            );
+
+
+                        const y =
+                            top +
+                            chartHeight -
+                            (score / 100) *
+                            chartHeight;
+
+
+                        return {
+                            x: x,
+                            y: y,
+                            score: score,
+                            date: item.date
+                        };
+
+                    }
+                );
+
+
+            /* ---------------------------------------------
+               Trend line
+            --------------------------------------------- */
+
+            ctx.strokeStyle =
+                "#16833a";
+
+            ctx.lineWidth = 3;
+
+            ctx.lineJoin =
+                "round";
+
+            ctx.lineCap =
+                "round";
+
+
+            ctx.beginPath();
+
+
+            points.forEach(
+                function (point, index) {
+
+                    if (index === 0) {
+
+                        ctx.moveTo(
+                            point.x,
+                            point.y
+                        );
+
+                    } else {
+
+                        ctx.lineTo(
+                            point.x,
+                            point.y
+                        );
+
+                    }
+
+                }
+            );
+
+
+            ctx.stroke();
+
+
+            /* ---------------------------------------------
+               Data points
+            --------------------------------------------- */
+
+            points.forEach(
+                function (point) {
+
+                    ctx.beginPath();
+
+                    ctx.arc(
+                        point.x,
+                        point.y,
+                        5,
+                        0,
+                        Math.PI * 2
+                    );
+
+                    ctx.fillStyle =
+                        "#16833a";
+
+                    ctx.fill();
+
+
+                    ctx.strokeStyle =
+                        "#ffffff";
+
+                    ctx.lineWidth = 2;
+
+                    ctx.stroke();
+
+
+                    /* Score label */
+
+                    ctx.fillStyle =
+                        "#173c27";
+
+                    ctx.font =
+                        "bold 12px Arial";
+
+                    ctx.textAlign =
+                        "center";
+
+                    ctx.textBaseline =
+                        "bottom";
+
+
+                    ctx.fillText(
+                        Math.round(
+                            point.score
+                        ),
+                        point.x,
+                        point.y - 9
+                    );
+
+                }
+            );
+
+
+            /* ---------------------------------------------
+               Dates
+            --------------------------------------------- */
+
+            ctx.fillStyle =
+                "#68776e";
+
+            ctx.font =
+                "11px Arial";
+
+
+            points.forEach(
+                function (point) {
+
+                    if (
+                        points.length > 8 &&
+                        point !== points[0] &&
+                        point !== points[
+                            points.length - 1
+                        ]
+                    ) {
+                        return;
+                    }
+
+
+                    ctx.save();
+
+
+                    ctx.translate(
+                        point.x,
+                        height - bottom + 10
+                    );
+
+
+                    ctx.rotate(
+                        -Math.PI / 6
+                    );
+
+
+                    ctx.textAlign =
+                        "right";
+
+                    ctx.textBaseline =
+                        "top";
+
+
+                    ctx.fillText(
+                        point.date,
+                        0,
+                        0
+                    );
+
+
+                    ctx.restore();
+
+                }
+            );
+
+        }
+
+    </script>
+
+</body>
+</html>
