@@ -82,19 +82,16 @@ Farmer uploads crop/leaf image
     Outbreak intelligence
               ↓
       Geographic map
-```
+---
+#  Features
 
- evidence-aware approach where geographically distinct and photo-supported reports can provide stronger outbreak evidence than raw report count alone.
-
-# 🚀 Features
-
-## 1. 📸 AI Crop Disease Detection
+## 1.  AI Crop Disease Detection
 
 Upload a crop or leaf image and the trained AI model predicts the most likely disease/class.
 
 ---
 
-## 2. 🤖 MobileNetV2 Model
+## 2.  MobileNetV2 Model
 
 The current model uses MobileNetV2 with transfer learning and fine-tuning.
 
@@ -119,7 +116,7 @@ model/crop_disease_model.keras
 
 ---
 
-## 3. 🎯 Prediction Confidence
+## 3.  Prediction Confidence
 
 The result page displays the model's prediction confidence.
 
@@ -133,7 +130,7 @@ Confidence: 91%
 
 ---
 
-## 4. 🛡️ AI Reliability Analysis
+## 4.  AI Reliability Analysis
 
 FasalRakshak does not rely only on the top prediction probability.
 
@@ -151,19 +148,19 @@ If the result is considered unreliable, the system can warn the user instead of 
 
 ---
 
-## 5. ⚠️ AI Uncertainty Warning
+## 5.  AI Uncertainty Warning
 
 When the system detects an uncertain prediction, it can display an uncertainty warning and recommend taking a clearer image.
 
 ---
 
-## 6. 🥇 Top Predictions
+## 6. Top Predictions
 
 The application can show the top candidate predictions instead of hiding alternative classes.
 
 ---
 
-## 7. 🌱 Crop Health Score
+## 7.  Crop Health Score
 
 The application provides a simplified **0–100 Crop Health Score**.
 
@@ -179,25 +176,25 @@ This makes the AI output easier to understand.
 
 ---
 
-## 8. 🔬 Disease Symptoms
+## 8.  Disease Symptoms
 
 Disease-specific symptoms are shown on the result page.
 
 ---
 
-## 9. 🌿 Fertilizer Guidance
+## 9.  Fertilizer Guidance
 
 The system provides general fertilizer/nutritional guidance associated with the detected condition.
 
 ---
 
-## 10. 🛡️ Prevention Guidance
+## 10.  Prevention Guidance
 
 The result page provides practical prevention recommendations.
 
 ---
 
-## 11. 🌐 Multilingual Interface
+## 11.  Multilingual Interface
 
 Supported languages:
 
@@ -213,7 +210,7 @@ translations.py
 
 ---
 
-## 12. 📤 Image Upload
+## 12.  Image Upload
 
 The homepage supports image selection and drag-and-drop upload.
 
@@ -234,7 +231,7 @@ Maximum upload size:
 
 ---
 
-## 13. 🗺️ Interactive Outbreak Map
+## 13.  Interactive Outbreak Map
 
 The project includes a dedicated outbreak intelligence page.
 
@@ -242,7 +239,7 @@ It uses an interactive map to display geographically organized outbreak informat
 
 ---
 
-## 14. 📍 Geographic Clustering
+## 14.  Geographic Clustering
 
 Disease reports can be organized into geographic clusters.
 
@@ -250,7 +247,7 @@ The purpose is to identify areas where multiple reports may represent a localize
 
 ---
 
-## 15. 🧠 Evidence-Weighted Outbreak Concept
+## 15.  Evidence-Weighted Outbreak Concept
 
 The system is designed around:
 
@@ -276,13 +273,13 @@ Outbreak
 
 ---
 
-## 16. 🌱 Genuine Outbreak Demonstration
+## 16.  Genuine Outbreak Demonstration
 
 The outbreak page includes a demonstration scenario representing geographically distributed evidence.
 
 ---
 
-## 17. 📢 Panic Reporting Demonstration
+## 17.  Panic Reporting Demonstration
 
 The outbreak page also contains a demonstration of concentrated/panic reporting.
 
@@ -290,13 +287,13 @@ This helps explain the CX0603 concept to judges.
 
 ---
 
-## 18. 📊 Outbreak Trends
+## 18.  Outbreak Trends
 
 The outbreak dashboard provides trend information to visualize report activity over time.
 
 ---
 
-## 19. 📈 Monitoring History
+## 19.  Monitoring History
 
 Previous crop scans can be stored in the local SQLite database.
 
@@ -310,7 +307,7 @@ History includes information such as:
 
 ---
 
-## 20. 📊 History Statistics
+## 20.  History Statistics
 
 The history page provides summary information such as:
 
@@ -321,13 +318,13 @@ The history page provides summary information such as:
 
 ---
 
-## 21. 📈 Monitoring Chart
+## 21.  Monitoring Chart
 
 Historical crop-health information can be visualized using the history chart.
 
 ---
 
-# 🤖 AI Model
+#  AI Model
 
 ## Architecture
 
@@ -379,60 +376,10 @@ Real-world performance can differ because field photographs can have:
 
 ---
 
-# 🌿 Supported Classes
-
-The current model contains 38 classes:
-
-```text
-Apple___Apple_scab
-Apple___Black_rot
-Apple___Cedar_apple_rust
-Apple___healthy
-Blueberry___healthy
-Cherry_(including_sour)___Powdery_mildew
-Cherry_(including_sour)___healthy
-Corn_(maize)___Cercospora_leaf_spot Gray_leaf_spot
-Corn_(maize)___Common_rust_
-Corn_(maize)___Northern_Leaf_Blight
-Corn_(maize)___healthy
-Grape___Black_rot
-Grape___Esca_(Black_Measles)
-Grape___Leaf_blight_(Isariopsis_Leaf_Spot)
-Grape___healthy
-Orange___Haunglongbing_(Citrus_greening)
-Peach___Bacterial_spot
-Peach___healthy
-Pepper,_bell___Bacterial_spot
-Pepper,_bell___healthy
-Potato___Early_blight
-Potato___Late_blight
-Potato___healthy
-Raspberry___healthy
-Soybean___healthy
-Squash___Powdery_mildew
-Strawberry___Leaf_scorch
-Strawberry___healthy
-Tomato___Bacterial_spot
-Tomato___Early_blight
-Tomato___Late_blight
-Tomato___Leaf_Mold
-Tomato___Septoria_leaf_spot
-Tomato___Spider_mites Two-spotted_spider_mite
-Tomato___Target_Spot
-Tomato___Tomato_Yellow_Leaf_Curl_Virus
-Tomato___Tomato_mosaic_virus
-Tomato___healthy
-```
-
-The official class mapping is stored in:
-
-```text
-model/classes.json
-```
 
 ---
 
-# 🛠️ Technology Stack
+#  Technology Stack
 
 ## Backend
 
@@ -467,7 +414,7 @@ model/classes.json
 
 ---
 
-# 📂 Project Structure
+#  Project Structure
 
 ```text
 FasalRakshak-AI/
@@ -507,22 +454,9 @@ FasalRakshak-AI/
 
 ---
 
-# 💻 System Requirements
 
-Recommended:
 
-- Windows 10/11
-- Python 3.10+
-- 8 GB RAM or more recommended
-- Internet connection for initial dependency installation
-- VS Code recommended
-- Git recommended for version control
-
-A GPU is helpful for training but is not required for basic application usage if the trained model is already available.
-
----
-
-# 📥 Installation
+#  Installation
 
 ## 1. Clone the Repository
 
@@ -540,7 +474,7 @@ cd FasalRakshak-AI
 
 ---
 
-# 🐍 Virtual Environment
+#  Virtual Environment
 
 Create a virtual environment:
 
@@ -578,7 +512,7 @@ Then activate again:
 
 ---
 
-# 📦 Install Dependencies
+#  Install Dependencies
 
 Make sure the virtual environment is active.
 
@@ -605,7 +539,7 @@ pip show pillow
 
 ---
 
-# ▶️ Run the Application
+#  Run the Application
 
 Make sure you are inside the project directory:
 
@@ -639,7 +573,7 @@ http://127.0.0.1:5000
 
 ---
 
-# 🌐 Application Pages
+#  Application Pages
 
 ## Home
 
@@ -699,7 +633,7 @@ Use this page to explore:
 
 ---
 
-# 📸 How to Use the Application
+#  How to Use the Application
 
 ## Step 1
 
@@ -755,7 +689,7 @@ http://127.0.0.1:5000/outbreak-map
 
 ---
 
-# 🧪 Model Testing
+#  Model Testing
 
 The project contains:
 
@@ -773,7 +707,7 @@ This can be used to verify that the trained model and class mapping are function
 
 ---
 
-# 📊 Model Evaluation
+#  Model Evaluation
 
 The project contains:
 
@@ -791,7 +725,7 @@ This is used for model evaluation.
 
 ---
 
-# 🗃️ Dataset Preparation
+#  Dataset Preparation
 
 Dataset preparation is handled by:
 
@@ -811,7 +745,7 @@ dataset/
 
 ---
 
-# 🧠 Check Dataset
+#  Check Dataset
 
 Use:
 
@@ -823,7 +757,7 @@ This script helps verify whether the dataset structure is detected correctly.
 
 ---
 
-# 🏗️ Build Reference Data
+#  Build Reference Data
 
 The reliability layer uses reference feature data.
 
@@ -847,7 +781,7 @@ model/reference_data.npz
 
 ---
 
-# 🏋️ Train the Model
+#  Train the Model
 
 Model training is handled by:
 
@@ -882,7 +816,7 @@ model/classes.json
 
 ---
 
-# ⚠️ Important Training Note
+#  Important Training Note
 
 The existing trained model is already included in the repository.
 
@@ -898,7 +832,7 @@ Training is only required when you want to:
 
 ---
 
-# 🌐 Multilingual Support
+#  Multilingual Support
 
 The project currently supports:
 
@@ -918,7 +852,7 @@ The language system covers interface text and disease-related information where 
 
 ---
 
-# 🗺️ Outbreak Mapping
+#  Outbreak Mapping
 
 The outbreak mapping functionality is available at:
 
@@ -951,7 +885,7 @@ These are demonstration features for the hackathon concept and should not be int
 
 ---
 
-# 📈 Monitoring History
+#  Monitoring History
 
 History is stored locally using SQLite.
 
@@ -975,34 +909,10 @@ The history page can display:
 
 ---
 
-# 📁 Important Files
-
-| File | Purpose |
-|---|---|
-| `app.py` | Main Flask application |
-| `disease_data.py` | Disease symptoms, fertilizer and prevention data |
-| `translations.py` | English/Hindi/Marathi translations |
-| `train_model.py` | Train/fine-tune the AI model |
-| `prepare_dataset.py` | Prepare dataset |
-| `evaluate_model.py` | Evaluate model |
-| `test_model.py` | Test trained model |
-| `check_dataset.py` | Check dataset |
-| `build_reference.py` | Build reliability reference features |
-| `requirements.txt` | Python dependencies |
-| `model/crop_disease_model.keras` | Trained AI model |
-| `model/classes.json` | 38 model classes |
-| `model/reference_data.npz` | Reference feature data |
-| `templates/index.html` | Homepage |
-| `templates/result.html` | Prediction result |
-| `templates/history.html` | Monitoring history |
-| `templates/outbreak_map.html` | Outbreak map |
-| `static/style.css` | Main styling |
-| `static/fasalrakshak-logo.jpeg` | Project logo |
-| `static/fasalrakshak-ai-visual.png` | AI visual |
 
 ---
 
-# 🔧 Git and GitHub Commands
+#  Git and GitHub Commands
 
 ## Check Git Version
 
@@ -1095,7 +1005,7 @@ git push origin main
 
 ---
 
-# 🔄 Updating the Project on Another Computer
+#  Updating the Project on Another Computer
 
 Clone the repository:
 
@@ -1141,29 +1051,12 @@ http://127.0.0.1:5000
 
 ---
 
-# 🧹 Git Ignored Files
 
-The following files/folders are intentionally excluded from GitHub:
 
-```text
-.venv/
-venv/
-env/
-dataset/
-__pycache__/
-*.db
-*.sqlite
-static/uploads/*
-.env
-.vscode/
-.idea/
-```
-
-This keeps the repository clean and prevents local/generated files from being committed.
 
 ---
 
-# 🔐 Environment Variables / Secrets
+#  Environment Variables / Secrets
 
 Never commit:
 
@@ -1179,7 +1072,7 @@ If future services such as WhatsApp APIs, weather APIs, or cloud databases are a
 
 ---
 
-# 🆘 Troubleshooting
+#  Troubleshooting
 
 ## Problem: `git` is not recognized
 
@@ -1349,23 +1242,23 @@ The dataset is only required for model training/evaluation workflows.
 
 ---
 
-# 🔮 Future Scope
+#  Future Scope
 
 Planned future improvements include:
 
-## 📲 WhatsApp Alerts
+##  WhatsApp Alerts
 
 Send outbreak warnings to registered farmers.
 
-## 📍 Hyperlocal Geo-Fencing
+##  Hyperlocal Geo-Fencing
 
 Notify farmers within a configurable distance from a verified outbreak cluster.
 
-## 🌦️ Weather Integration
+##  Weather Integration
 
 Combine weather conditions with disease reports.
 
-## 🔥 Advanced Outbreak Risk Score
+##  Advanced Outbreak Risk Score
 
 Generate an outbreak risk score using:
 
@@ -1375,59 +1268,29 @@ Generate an outbreak risk score using:
 - Weather
 - Time trends
 
-## 📸 Community Verification
+##  Community Verification
 
 Allow nearby farmers to confirm or dispute an outbreak signal.
 
-## 🎙️ Voice Assistant
+## Voice Assistant
 
 Support farmer queries through Hindi and Marathi voice interaction.
 
-## 📴 Offline Mode
+##  Offline Mode
 
 Store reports locally and synchronize them when connectivity returns.
 
-## 🛰️ Satellite Integration
+##  Satellite Integration
 
 Use satellite-derived crop/vegetation information for regional risk monitoring.
 
-## 📱 Mobile Application
+## Mobile Application
 
 Extend the platform to Android/mobile devices.
 
----
 
-# ⚠️ Disclaimer
 
-FasalRakshak AI is a prototype developed for educational, research, and hackathon purposes.
-
-AI predictions should not be considered a definitive agricultural diagnosis.
-
-Disease appearance can vary depending on:
-
-- Crop variety
-- Lighting
-- Camera quality
-- Growth stage
-- Environmental conditions
-- Disease severity
-- Field conditions
-
-Users should consult qualified agricultural experts or local agricultural authorities before making major treatment or pesticide decisions.
-
-The outbreak mapping and demonstration features are prototypes and should not be interpreted as official epidemiological or agricultural authority alerts.
-
----
-
-# 👨‍💻 Project Repository
-
-GitHub:
-
-https://github.com/Devesh1006/FasalRakshak-AI
-
----
-
-# 🌱 FasalRakshak AI
+#  FasalRakshak AI
 
 ### Turning crop images and farmer observations into agricultural intelligence.
 
