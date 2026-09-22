@@ -1,4 +1,4 @@
-# 🌱 FasalRakshak AI
+#  FasalRakshak AI
 
 ## AI-Powered Crop Disease Detection & Evidence-Weighted Outbreak Intelligence
 
@@ -84,55 +84,7 @@ Farmer uploads crop/leaf image
       Geographic map
 ```
 
----
-
-# ❗ Problem Statement
-
-Crop diseases can spread rapidly and farmers may not immediately know what is affecting their crops.
-
-Traditional reporting systems can also produce misleading signals because:
-
-```text
-More reports
-      ≠
-More independent evidence
-```
-
-For example, after one disease alert becomes known, several farmers may submit similar reports because of the same event.
-
-FasalRakshak AI explores an evidence-aware approach where geographically distinct and photo-supported reports can provide stronger outbreak evidence than raw report count alone.
-
----
-
-# 💡 Solution
-
-FasalRakshak AI combines:
-
-```text
-AI Diagnosis
-     +
-Reliability Analysis
-     +
-Crop Health
-     +
-Geographic Clustering
-     +
-Evidence Analysis
-     ↓
-Agricultural Intelligence
-```
-
-The platform can therefore support both:
-
-### Individual Farmer
-
-Identify a possible crop disease and understand basic prevention guidance.
-
-### Agricultural Monitoring
-
-Visualize geographic disease reports and potential outbreak clusters.
-
----
+ evidence-aware approach where geographically distinct and photo-supported reports can provide stronger outbreak evidence than raw report count alone.
 
 # 🚀 Features
 
