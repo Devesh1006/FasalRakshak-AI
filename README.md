@@ -1295,3 +1295,5 @@ Extend the platform to Android/mobile devices.
 ### Turning crop images and farmer observations into agricultural intelligence.
 
 **AI Diagnosis → Reliability → Crop Health → Evidence → Geographic Intelligence → Early Warning**
+#   F a s a l r a k s h a k - A I  
+ 
