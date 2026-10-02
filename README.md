@@ -1,334 +1,250 @@
-#  FasalRakshak AI
+🌾 FasalRakshak AI
 
-## AI-Powered Crop Disease Detection & Evidence-Weighted Outbreak Intelligence
+AI-Powered Crop Disease Detection & Evidence-Weighted Outbreak Intelligence
 
 FasalRakshak AI is an AI-powered agricultural web application that helps identify crop diseases from plant/leaf images and provides disease information, crop-health scoring, reliability analysis, monitoring history, and geographically organized outbreak intelligence.
 
-The project is designed around the idea that **an increase in reports does not always mean an increase in independent evidence**.
+Core idea: An increase in reports does not always mean an increase in independent evidence.
 
-FasalRakshak therefore combines:
+The platform combines AI-based disease detection with confidence analysis, crop-health assessment, monitoring history, and evidence-weighted geographic outbreak intelligence.
 
-- AI-based crop disease detection
-- Prediction confidence
-- AI reliability analysis
-- Crop Health Score
-- Disease symptoms
-- Fertilizer guidance
-- Prevention recommendations
-- Multilingual support
-- Crop monitoring history
-- Geographic outbreak clustering
-- Evidence-weighted outbreak analysis
-- Interactive outbreak mapping
+📌 Table of Contents
 
----
+Project Overview
 
-# 📌 Table of Contents
+Problem Statement
 
-1. [Project Overview](#-project-overview)
-2. [Problem Statement](#-problem-statement)
-3. [Solution](#-solution)
-4. [Features](#-features)
-5. [AI Model](#-ai-model)
-6. [Supported Classes](#-supported-classes)
-7. [Technology Stack](#-technology-stack)
-8. [Project Structure](#-project-structure)
-9. [System Requirements](#-system-requirements)
-10. [Installation](#-installation)
-11. [Virtual Environment](#-virtual-environment)
-12. [Install Dependencies](#-install-dependencies)
-13. [Run the Application](#-run-the-application)
-14. [Application Pages](#-application-pages)
-15. [How to Use the Application](#-how-to-use-the-application)
-16. [Model Testing](#-model-testing)
-17. [Model Evaluation](#-model-evaluation)
-18. [Dataset Preparation](#-dataset-preparation)
-19. [Model Training](#-model-training)
-20. [Reference Data](#-reference-data)
-21. [Multilingual Support](#-multilingual-support)
-22. [Outbreak Mapping](#-outbreak-mapping)
-23. [Monitoring History](#-monitoring-history)
-24. [Important Files](#-important-files)
-25. [Git and GitHub Commands](#-git-and-github-commands)
-26. [Troubleshooting](#-troubleshooting)
-27. [Future Scope](#-future-scope)
-28. [Disclaimer](#-disclaimer)
+Solution
 
----
+Key Features
 
-# 🌾 Project Overview
+AI Model
 
-FasalRakshak AI is a Flask-based AI web application for agricultural crop monitoring.
+Supported Classes
 
-The main workflow is:
+Technology Stack
 
-```text
+Project Structure
+
+System Requirements
+
+Installation
+
+Run the Application
+
+How to Use
+
+Application Pages
+
+Model Testing & Evaluation
+
+Dataset & Training
+
+Multilingual Support
+
+Outbreak Intelligence
+
+Monitoring History
+
+Git & GitHub Workflow
+
+Troubleshooting
+
+Future Scope
+
+Disclaimer
+
+🌱 Project Overview
+
+FasalRakshak AI follows this workflow:
+
 Farmer uploads crop/leaf image
-              ↓
-       Image preprocessing
-              ↓
-       AI disease detection
-              ↓
-       Confidence analysis
-              ↓
-       Reliability analysis
-              ↓
-       Crop Health Score
-              ↓
- Disease symptoms / fertilizer / prevention
-              ↓
-       Monitoring history
-              ↓
-    Outbreak intelligence
-              ↓
-      Geographic map
----
-#  Features
+          ↓
+Image preprocessing
+          ↓
+AI disease detection
+          ↓
+Confidence & reliability analysis
+          ↓
+Crop Health Score
+          ↓
+Symptoms / Fertilizer / Prevention guidance
+          ↓
+Monitoring history
+          ↓
+Evidence-weighted outbreak intelligence
+          ↓
+Interactive geographic map
 
-## 1.  AI Crop Disease Detection
+🎯 Problem Statement
+
+Crop diseases can spread before farmers are able to recognize a wider pattern.
+
+A single disease report may indicate an isolated case, while many reports from the same area may be caused by repeated reporting of the same local observation. Therefore, simply counting reports may not provide enough evidence of a developing outbreak.
+
+FasalRakshak AI explores an evidence-weighted approach that considers:
+
+Disease prediction confidence
+
+Geographic distribution
+
+Independent evidence
+
+Time trends
+
+Image/reliability signals
+
+💡 Solution
+
+FasalRakshak AI combines crop disease detection with monitoring and outbreak intelligence.
+
+Instead of treating:
+
+More Reports → Outbreak
+
+as sufficient evidence, the project uses the concept:
+
+Evidence
++ Geographic Diversity
++ Disease Confidence
++ Time Trend
+        ↓
+Outbreak Signal
+
+The outbreak functionality is designed as a demonstration of this concept rather than a real epidemiological diagnosis system.
+
+🚀 Key Features
+
+1. AI Crop Disease Detection
 
 Upload a crop or leaf image and the trained AI model predicts the most likely disease/class.
 
----
-
-## 2.  MobileNetV2 Model
-
-The current model uses MobileNetV2 with transfer learning and fine-tuning.
-
-Current configuration:
-
-- Architecture: MobileNetV2
-- Input size: 224 × 224
-- Classes: 38
-- Transfer learning: Yes
-- Fine-tuning: Yes
-- Data augmentation: Yes
-
-Current validation accuracy:
-
-**97.12%**
-
-Model file:
-
-```text
-model/crop_disease_model.keras
-```
-
----
-
-## 3.  Prediction Confidence
+2. Prediction Confidence
 
 The result page displays the model's prediction confidence.
 
 Example:
 
-```text
 Tomato Late Blight
-
 Confidence: 91%
-```
 
----
+3. AI Reliability Analysis
 
-## 4.  AI Reliability Analysis
+The application can consider multiple signals instead of relying only on the top prediction probability:
 
-FasalRakshak does not rely only on the top prediction probability.
+Prediction confidence
 
-The system can consider:
+Prediction margin
 
-- Prediction confidence
-- Prediction margin
-- Image quality
-- Feature similarity
-- Reference examples
-- Alternative predictions
-- Image/view consistency where available
+Image quality
 
-If the result is considered unreliable, the system can warn the user instead of presenting it as a definitive diagnosis.
+Feature similarity
 
----
+Reference examples
 
-## 5.  AI Uncertainty Warning
+Alternative predictions
 
-When the system detects an uncertain prediction, it can display an uncertainty warning and recommend taking a clearer image.
+Image/view consistency where available
 
----
+When a result is considered unreliable, the system can warn the user instead of presenting it as a definitive diagnosis.
 
-## 6. Top Predictions
+4. Uncertainty Warning
 
-The application can show the top candidate predictions instead of hiding alternative classes.
+Uncertain predictions can trigger a warning recommending a clearer image.
 
----
+5. Top Predictions
 
-## 7.  Crop Health Score
+The application can display alternative candidate predictions rather than hiding them.
 
-The application provides a simplified **0–100 Crop Health Score**.
+6. Crop Health Score
+
+A simplified 0–100 Crop Health Score helps make the AI output easier to understand.
 
 Example:
 
-```text
-Crop Health
+Crop Health: 78 / 100
 
-78 / 100
-```
+7. Disease Symptoms
 
-This makes the AI output easier to understand.
+Disease-specific symptoms are displayed on the result page.
 
----
+8. Fertilizer Guidance
 
-## 8.  Disease Symptoms
+The application provides general fertilizer/nutritional guidance associated with the detected condition.
 
-Disease-specific symptoms are shown on the result page.
-
----
-
-## 9.  Fertilizer Guidance
-
-The system provides general fertilizer/nutritional guidance associated with the detected condition.
-
----
-
-## 10.  Prevention Guidance
+9. Prevention Guidance
 
 The result page provides practical prevention recommendations.
 
----
-
-## 11.  Multilingual Interface
+10. Multilingual Interface
 
 Supported languages:
 
-- English
-- Hindi
-- Marathi
+English
 
-Translation logic is maintained in:
+Hindi
 
-```text
-translations.py
-```
+Marathi
 
----
+Translation logic is maintained in translations.py.
 
-## 12.  Image Upload
+11. Image Upload
 
-The homepage supports image selection and drag-and-drop upload.
+Supported image formats:
 
-Supported formats:
-
-```text
 JPG
 JPEG
 PNG
 WEBP
-```
 
 Maximum upload size:
 
-```text
 5 MB
-```
 
----
+12. Interactive Outbreak Map
 
-## 13.  Interactive Outbreak Map
+The outbreak intelligence page provides an interactive geographic map showing organized outbreak information and demonstration scenarios.
 
-The project includes a dedicated outbreak intelligence page.
+13. Geographic Clustering
 
-It uses an interactive map to display geographically organized outbreak information.
+Disease reports can be organized into geographic clusters to explore areas where multiple reports may represent a localized outbreak.
 
----
+14. Monitoring History
 
-## 14.  Geographic Clustering
+Previous crop scans can be stored locally using SQLite.
 
-Disease reports can be organized into geographic clusters.
+History can include:
 
-The purpose is to identify areas where multiple reports may represent a localized outbreak.
+Date/time
 
----
+Crop
 
-## 15.  Evidence-Weighted Outbreak Concept
+Disease
 
-The system is designed around:
+Confidence
 
-```text
-Evidence
-   +
-Geographic Diversity
-   +
-Disease Confidence
-   +
-Time Trend
-   ↓
-Outbreak Signal
-```
+Crop Health Score
 
-rather than:
+15. History Statistics
 
-```text
-Raw Report Count
-       ↓
-Outbreak
-```
+The history page can show:
 
----
+Total scans
 
-## 16.  Genuine Outbreak Demonstration
+Average confidence
 
-The outbreak page includes a demonstration scenario representing geographically distributed evidence.
+Healthy scans
 
----
+Disease scans
 
-## 17.  Panic Reporting Demonstration
+Historical crop-health information
 
-The outbreak page also contains a demonstration of concentrated/panic reporting.
+🤖 AI Model
 
-This helps explain the CX0603 concept to judges.
+Architecture
 
----
+The current model uses MobileNetV2 with transfer learning and fine-tuning.
 
-## 18.  Outbreak Trends
-
-The outbreak dashboard provides trend information to visualize report activity over time.
-
----
-
-## 19.  Monitoring History
-
-Previous crop scans can be stored in the local SQLite database.
-
-History includes information such as:
-
-- Date/time
-- Crop
-- Disease
-- Confidence
-- Crop Health Score
-
----
-
-## 20.  History Statistics
-
-The history page provides summary information such as:
-
-- Total scans
-- Average confidence
-- Healthy scans
-- Disease scans
-
----
-
-## 21.  Monitoring Chart
-
-Historical crop-health information can be visualized using the history chart.
-
----
-
-#  AI Model
-
-## Architecture
-
-```text
 MobileNetV2
      ↓
 Feature Extraction
@@ -336,87 +252,101 @@ Feature Extraction
 Classification Head
      ↓
 38 Crop/Disease Classes
-```
 
-The model uses transfer learning and fine-tuning.
+Current Configuration
 
----
+Property
 
-## Training Stages
+Value
 
-### Stage 1
+Architecture
 
-The pretrained feature extractor is used with a classification head.
+MobileNetV2
 
-### Stage 2
+Input Size
 
-Selected upper layers are fine-tuned using a lower learning rate.
+224 × 224
 
----
+Number of Classes
 
-## Model Performance
+38
 
-Current validation result:
+Transfer Learning
 
-```text
-Validation Accuracy: 97.12%
-Validation Loss:     0.0798
-```
+Yes
 
-The validation result comes from the PlantVillage-based dataset used during development.
+Fine-Tuning
 
-Real-world performance can differ because field photographs can have:
+Yes
 
-- Different lighting
-- Complex backgrounds
-- Different camera quality
-- Different crop varieties
-- Multiple symptoms
-- Unseen disease appearances
+Data Augmentation
 
----
+Yes
 
+Validation Accuracy
 
----
+97.12%
 
-#  Technology Stack
+Validation Loss
 
-## Backend
+0.0798
 
-- Python
-- Flask
+Model file:
 
-## AI / Machine Learning
+model/crop_disease_model.keras
 
-- TensorFlow
-- Keras
-- MobileNetV2
-- NumPy
-- Pillow
+The reported validation result comes from the PlantVillage-based dataset used during development. Real-world field performance can differ because field photographs may have different lighting, backgrounds, camera quality, crop varieties, multiple symptoms, and unseen disease appearances.
 
-## Frontend
+🌿 Supported Classes
 
-- HTML
-- CSS
-- JavaScript
+The model currently supports 38 crop/disease classes.
 
-## Maps
+Class mapping is stored in:
 
-- Leaflet
+model/classes.json
 
-## Database
+🛠️ Technology Stack
 
-- SQLite
+Backend
 
-## Dataset
+Python
 
-- PlantVillage
+Flask
 
----
+AI / Machine Learning
 
-#  Project Structure
+TensorFlow
 
-```text
+Keras
+
+MobileNetV2
+
+NumPy
+
+Pillow
+
+Frontend
+
+HTML
+
+CSS
+
+JavaScript
+
+Maps
+
+Leaflet
+
+Database
+
+SQLite
+
+Dataset
+
+PlantVillage
+
+📁 Project Structure
+
 FasalRakshak-AI/
 │
 ├── app.py
@@ -450,421 +380,257 @@ FasalRakshak-AI/
     ├── result.html
     ├── history.html
     └── outbreak_map.html
-```
 
----
+💻 System Requirements
 
+Recommended environment:
 
+Windows / Linux / macOS
 
-#  Installation
+Python 3.x
 
-## 1. Clone the Repository
+Git
 
-Open PowerShell:
+Internet connection for initial dependency installation
 
-```powershell
+Sufficient RAM and storage for TensorFlow and the project model
+
+The existing trained model is included in the repository, so the dataset is not required just to run the web application.
+
+⚙️ Installation
+
+1. Clone the Repository
+
 git clone https://github.com/Devesh1006/FasalRakshak-AI.git
-```
 
-Enter the project:
+Enter the project directory:
 
-```powershell
 cd FasalRakshak-AI
-```
 
----
+2. Create a Virtual Environment
 
-#  Virtual Environment
-
-Create a virtual environment:
-
-```powershell
 python -m venv .venv
-```
 
 Activate it:
 
-```powershell
 .\.venv\Scripts\Activate.ps1
-```
 
-After activation, the terminal should show something similar to:
+You should see something similar to:
 
-```text
 (.venv) PS C:\...\FasalRakshak-AI>
-```
 
----
+If PowerShell Blocks Activation
 
-## If PowerShell Blocks Activation
+Run:
 
-If Windows shows an execution-policy error, run:
-
-```powershell
 Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
-```
 
 Then activate again:
 
-```powershell
 .\.venv\Scripts\Activate.ps1
-```
 
----
+3. Install Dependencies
 
-#  Install Dependencies
-
-Make sure the virtual environment is active.
-
-Then:
-
-```powershell
 pip install -r requirements.txt
-```
 
-If `requirements.txt` is unavailable or you need the main runtime packages manually:
+If required, the main runtime packages can also be installed manually:
 
-```powershell
 pip install flask tensorflow numpy pillow opencv-python
-```
 
-Verify important packages:
+▶️ Run the Application
 
-```powershell
-pip show flask
-pip show tensorflow
-pip show numpy
-pip show pillow
-```
+Make sure the virtual environment is active:
 
----
-
-#  Run the Application
-
-Make sure you are inside the project directory:
-
-```powershell
-cd FasalRakshak-AI
-```
-
-Activate the environment:
-
-```powershell
 .\.venv\Scripts\Activate.ps1
-```
 
-Run:
+Then run:
 
-```powershell
 python app.py
-```
 
-You should see Flask start on:
+The application should start at:
 
-```text
 http://127.0.0.1:5000
-```
 
-Open your browser and visit:
+Open that address in your browser.
 
-```text
-http://127.0.0.1:5000
-```
+🖥️ Application Pages
 
----
+Home
 
-#  Application Pages
-
-## Home
-
-```text
 http://127.0.0.1:5000/
-```
 
 Use this page to:
 
-- Upload a crop image
-- Select a language
-- Start disease analysis
+Upload a crop image
 
----
+Select a language
 
-## Result
+Start disease analysis
 
-The result page is generated after uploading an image.
+Result
 
-It displays:
+The result page displays information such as:
 
-- Crop
-- Disease
-- Confidence
-- Reliability
-- Crop Health Score
-- Top predictions
-- Symptoms
-- Fertilizer guidance
-- Prevention guidance
+Crop
 
----
-
-## Monitoring History
-
-```text
-http://127.0.0.1:5000/history
-```
-
-Use this page to review previous scans.
-
----
-
-## Outbreak Map
-
-```text
-http://127.0.0.1:5000/outbreak-map
-```
-
-Use this page to explore:
-
-- Outbreak clusters
-- Geographic reports
-- Trend information
-- Evidence demonstrations
-- Interactive map
-
----
-
-#  How to Use the Application
-
-## Step 1
-
-Open:
-
-```text
-http://127.0.0.1:5000
-```
-
-## Step 2
-
-Choose:
-
-```text
-Upload Crop Image
-```
-
-## Step 3
-
-Select a JPG, PNG, JPEG, or WEBP image.
-
-Maximum size:
-
-```text
-5 MB
-```
-
-## Step 4
-
-The application automatically analyzes the image.
-
-## Step 5
-
-Review:
-
-```text
 Disease
+
 Confidence
+
 Reliability
+
 Crop Health Score
+
+Top predictions
+
 Symptoms
+
 Fertilizer guidance
-Prevention
-```
 
-## Step 6
+Prevention guidance
 
-For outbreak information, open:
+Monitoring History
 
-```text
+http://127.0.0.1:5000/history
+
+Review previous crop scans and history statistics.
+
+Outbreak Map
+
 http://127.0.0.1:5000/outbreak-map
-```
 
----
+Explore:
 
-#  Model Testing
+Geographic reports
+
+Outbreak clusters
+
+Trend information
+
+Evidence demonstrations
+
+Interactive map
+
+📸 How to Use
+
+Open the application.
+
+Choose Upload Crop Image.
+
+Select a JPG, JPEG, PNG, or WEBP image.
+
+Keep the image size within the 5 MB upload limit.
+
+The application analyzes the image.
+
+Review the disease prediction and confidence.
+
+Review reliability, Crop Health Score, symptoms, fertilizer guidance, and prevention recommendations.
+
+Open the history page to review previous scans.
+
+Open the outbreak map to explore the geographic intelligence demonstration.
+
+🧪 Model Testing & Evaluation
+
+Test the Model
 
 The project contains:
 
-```text
 test_model.py
-```
-
-To run the model test:
-
-```powershell
-python test_model.py
-```
-
-This can be used to verify that the trained model and class mapping are functioning.
-
----
-
-#  Model Evaluation
-
-The project contains:
-
-```text
-evaluate_model.py
-```
 
 Run:
 
-```powershell
+python test_model.py
+
+This can be used to verify that the trained model and class mapping are functioning.
+
+Evaluate the Model
+
+The project contains:
+
+evaluate_model.py
+
+Run:
+
 python evaluate_model.py
-```
 
 This is used for model evaluation.
 
----
+🗂️ Dataset & Training
 
-#  Dataset Preparation
+Dataset Preparation
 
 Dataset preparation is handled by:
 
-```text
 prepare_dataset.py
-```
 
 Before preparing or retraining the model, the required dataset must be available locally.
 
 The dataset is intentionally excluded from GitHub because of its size.
 
-The `.gitignore` contains:
+The .gitignore contains:
 
-```text
 dataset/
-```
 
----
+Check Dataset
 
-#  Check Dataset
-
-Use:
-
-```powershell
 python check_dataset.py
-```
 
-This script helps verify whether the dataset structure is detected correctly.
+Build Reference Data
 
----
+Reference feature generation is handled by:
 
-#  Build Reference Data
-
-The reliability layer uses reference feature data.
-
-Reference generation is handled by:
-
-```text
 build_reference.py
-```
 
 Run:
 
-```powershell
 python build_reference.py
-```
 
-The generated reference file is:
+Generated file:
 
-```text
 model/reference_data.npz
-```
 
----
+Train the Model
 
-#  Train the Model
+Training is handled by:
 
-Model training is handled by:
-
-```text
 train_model.py
-```
 
 Run:
 
-```powershell
 python train_model.py
-```
-
-Training may take significant time depending on:
-
-- CPU/GPU
-- RAM
-- Dataset size
-- TensorFlow configuration
 
 The trained model is saved as:
 
-```text
 model/crop_disease_model.keras
-```
 
 Class information is saved as:
 
-```text
 model/classes.json
-```
 
----
+Training is not normally required just to run the web application. Retraining is useful when changing the dataset, adding classes, improving the model, experimenting with the architecture, or training with new field data.
 
-#  Important Training Note
+🌐 Multilingual Support
 
-The existing trained model is already included in the repository.
+The current interface supports:
 
-You normally do **not** need to train the model just to run the web application.
+🇬🇧 English
 
-Training is only required when you want to:
+🇮🇳 Hindi
 
-- Change the dataset
-- Add new classes
-- Improve the model
-- Experiment with the architecture
-- Retrain using new field data
+🇮🇳 Marathi
 
----
+Translation configuration is maintained in:
 
-#  Multilingual Support
-
-The project currently supports:
-
-```text
-English
-Hindi
-Marathi
-```
-
-Translation configuration is stored in:
-
-```text
 translations.py
-```
 
-The language system covers interface text and disease-related information where translations are available.
+🗺️ Outbreak Intelligence
 
----
+The outbreak intelligence functionality demonstrates an evidence-weighted approach to geographic disease reporting.
 
-#  Outbreak Mapping
+Core Concept
 
-The outbreak mapping functionality is available at:
-
-```text
-http://127.0.0.1:5000/outbreak-map
-```
-
-The system demonstrates the concept of evidence-weighted geographic outbreak intelligence.
-
-The key concept is:
-
-```text
 Independent Evidence
         +
 Geographic Distribution
@@ -872,428 +638,288 @@ Geographic Distribution
 AI Confidence
         ↓
 Outbreak Signal
-```
 
 The project also includes demonstration scenarios for:
 
-```text
 Genuine Outbreak
+
 Panic Reporting
-```
 
-These are demonstration features for the hackathon concept and should not be interpreted as real epidemiological outbreak detection.
+These scenarios are intended to demonstrate the project concept and should not be interpreted as real epidemiological outbreak detection.
 
----
+Important Distinction
 
-#  Monitoring History
+Raw Report Count
+       ≠
+Independent Evidence
+
+The system is designed to explore how geographic diversity, confidence, and time trends can provide additional context.
+
+📊 Monitoring History
 
 History is stored locally using SQLite.
 
-The local database file is:
+Database file:
 
-```text
 cropcare.db
-```
 
 The database is intentionally excluded from GitHub.
 
 The history page can display:
 
-- Total scans
-- Average confidence
-- Healthy scans
-- Disease scans
-- Individual scan records
-- Health scores
-- Historical chart
+Total scans
 
----
+Average confidence
 
+Healthy scans
 
----
+Disease scans
 
-#  Git and GitHub Commands
+Individual scan records
 
-## Check Git Version
+Crop Health Scores
 
-```powershell
-git --version
-```
+Historical chart
 
----
+🔄 Git & GitHub Workflow
 
-## Check Repository Status
+Check Repository Status
 
-```powershell
 git status
-```
 
----
+Pull Latest Changes
 
-## Check Current Branch
-
-```powershell
-git branch
-```
-
----
-
-## Check Remote Repository
-
-```powershell
-git remote -v
-```
-
----
-
-## Pull Latest Changes
-
-```powershell
 git pull origin main
-```
 
----
+Add Changes
 
-## Add Changes
-
-```powershell
 git add .
-```
 
----
+Commit Changes
 
-## Check Staged Changes
+git commit -m "Update FasalRakshak AI"
 
-```powershell
-git status
-```
+Push Changes
 
----
-
-## Commit Changes
-
-```powershell
-git commit -m "Describe your changes"
-```
-
-Example:
-
-```powershell
-git commit -m "Improve outbreak map UI"
-```
-
----
-
-## Push Changes
-
-```powershell
 git push origin main
-```
 
----
+Complete Workflow
 
-## Complete Update Workflow
+Whenever you modify the project:
 
-Whenever changes are made:
-
-```powershell
 git status
 git add .
 git commit -m "Update FasalRakshak AI"
 git push origin main
-```
 
----
-
-#  Updating the Project on Another Computer
+💻 Running the Project on Another Computer
 
 Clone the repository:
 
-```powershell
 git clone https://github.com/Devesh1006/FasalRakshak-AI.git
-```
 
-Enter it:
+Enter the project:
 
-```powershell
 cd FasalRakshak-AI
-```
 
-Create environment:
+Create the environment:
 
-```powershell
 python -m venv .venv
-```
 
-Activate:
+Activate it:
 
-```powershell
 .\.venv\Scripts\Activate.ps1
-```
 
-Install:
+Install dependencies:
 
-```powershell
 pip install -r requirements.txt
-```
 
-Run:
+Run the application:
 
-```powershell
 python app.py
-```
 
 Then open:
 
-```text
 http://127.0.0.1:5000
-```
 
----
+🔐 Environment Variables & Secrets
 
+Never commit sensitive information such as:
 
-
-
----
-
-#  Environment Variables / Secrets
-
-Never commit:
-
-```text
 .env
 API keys
 Passwords
 Private credentials
 Access tokens
-```
 
-If future services such as WhatsApp APIs, weather APIs, or cloud databases are added, their credentials should be stored using environment variables.
+If future services such as WhatsApp APIs, weather APIs, or cloud databases are added, store their credentials using environment variables.
 
----
+🛠️ Troubleshooting
 
-#  Troubleshooting
+git is not recognized
 
-## Problem: `git` is not recognized
-
-Install Git for Windows and restart VS Code.
+Install Git for Windows and restart your terminal.
 
 Check:
 
-```powershell
 git --version
-```
 
----
-
-## Problem: `python` is not recognized
+python is not recognized
 
 Check:
 
-```powershell
 python --version
-```
 
-If Python is installed but not recognized, add Python to PATH or reinstall Python with:
+If Python is installed but not recognized, add Python to PATH or reinstall Python with Add Python to PATH enabled.
 
-```text
-Add Python to PATH
-```
+Flask is missing
 
-enabled.
-
----
-
-## Problem: Flask is missing
-
-Error:
-
-```text
 ModuleNotFoundError: No module named 'flask'
-```
 
 Run:
 
-```powershell
 pip install flask
-```
 
-Or install everything:
+Or:
 
-```powershell
 pip install -r requirements.txt
-```
 
----
+PIL is missing
 
-## Problem: PIL is missing
-
-Error:
-
-```text
 ModuleNotFoundError: No module named 'PIL'
-```
 
 Run:
 
-```powershell
 pip install Pillow
-```
 
----
+NumPy is missing
 
-## Problem: NumPy is missing
-
-Error:
-
-```text
-ModuleNotFoundError: No module named 'numpy'
-```
-
-Run:
-
-```powershell
 pip install numpy
-```
 
----
+OpenCV is missing
 
-## Problem: OpenCV is missing
-
-Run:
-
-```powershell
 pip install opencv-python
-```
 
----
+TensorFlow is missing
 
-## Problem: TensorFlow is missing
-
-Run:
-
-```powershell
 pip install tensorflow
-```
 
----
-
-## Problem: Wrong Python Environment
+Wrong Python Environment
 
 Check:
 
-```powershell
 where python
-```
 
 The active environment should point to something similar to:
 
-```text
 ...\FasalRakshak-AI\.venv\Scripts\python.exe
-```
 
-Activate the environment again:
+Activate again if necessary:
 
-```powershell
 .\.venv\Scripts\Activate.ps1
-```
 
----
+Port 5000 is Already in Use
 
-## Problem: Port 5000 is Already in Use
+Stop the existing Flask process or change the port in app.py.
 
-Stop the existing Flask process or change the port in `app.py`.
+Normal application URL:
 
-The normal application URL is:
-
-```text
 http://127.0.0.1:5000
-```
 
----
-
-## Problem: Model File Not Found
+Model File Not Found
 
 Check:
 
-```powershell
 Get-ChildItem .\model\
-```
 
-You should have:
+The model directory should contain:
 
-```text
 classes.json
 crop_disease_model.keras
 reference_data.npz
-```
 
----
+Dataset Not Found
 
-## Problem: Dataset Not Found
+The dataset is not included in GitHub intentionally.
 
-The dataset is not included in the GitHub repository.
+The application can run using the existing trained model without downloading the training dataset again.
 
-This is intentional.
+The dataset is required only for training/evaluation workflows.
 
-The project can run using the already trained model without downloading the training dataset again.
+🔮 Future Scope
 
-The dataset is only required for model training/evaluation workflows.
+Planned improvements include:
 
----
-
-#  Future Scope
-
-Planned future improvements include:
-
-##  WhatsApp Alerts
+📱 WhatsApp Alerts
 
 Send outbreak warnings to registered farmers.
 
-##  Hyperlocal Geo-Fencing
+📍 Hyperlocal Geo-Fencing
 
 Notify farmers within a configurable distance from a verified outbreak cluster.
 
-##  Weather Integration
+🌦️ Weather Integration
 
 Combine weather conditions with disease reports.
 
-##  Advanced Outbreak Risk Score
+📈 Advanced Outbreak Risk Score
 
-Generate an outbreak risk score using:
+Combine:
 
-- Evidence
-- Geographic diversity
-- AI confidence
-- Weather
-- Time trends
+Evidence
 
-##  Community Verification
+Geographic diversity
+
+AI confidence
+
+Weather
+
+Time trends
+
+👨‍🌾 Community Verification
 
 Allow nearby farmers to confirm or dispute an outbreak signal.
 
-## Voice Assistant
+🎙️ Voice Assistant
 
 Support farmer queries through Hindi and Marathi voice interaction.
 
-##  Offline Mode
+📴 Offline Mode
 
 Store reports locally and synchronize them when connectivity returns.
 
-##  Satellite Integration
+🛰️ Satellite Integration
 
 Use satellite-derived crop/vegetation information for regional risk monitoring.
 
-## Mobile Application
+📲 Mobile Application
 
 Extend the platform to Android/mobile devices.
 
+⚠️ Disclaimer
 
+FasalRakshak AI is a project prototype for crop disease detection, monitoring, and evidence-weighted outbreak intelligence.
 
-#  FasalRakshak AI
+AI predictions and outbreak demonstrations should not be treated as a substitute for professional agricultural or plant-disease diagnosis.
 
-### Turning crop images and farmer observations into agricultural intelligence.
+Real-world model performance may differ from validation performance depending on image quality, environment, crop variety, disease appearance, and other field conditions.
 
-**AI Diagnosis → Reliability → Crop Health → Evidence → Geographic Intelligence → Early Warning**
-#   F a s a l r a k s h a k - A I  
- 
+🌾 FasalRakshak AI
+
+Turning crop images and farmer observations into agricultural intelligence.
+
+AI Diagnosis
+     ↓
+Reliability
+     ↓
+Crop Health
+     ↓
+Evidence
+     ↓
+Geographic Intelligence
+     ↓
+Early Warning
+
+👨‍💻 Project Repository
+
+GitHub: https://github.com/Devesh1006/FasalRakshak-AI
